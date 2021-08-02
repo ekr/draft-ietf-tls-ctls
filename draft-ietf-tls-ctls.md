@@ -42,9 +42,10 @@ informative:
 
 This document specifies a "compact" version of TLS 1.3. It is
 isomorphic to TLS 1.3 but saves space by trimming obsolete material,
-tighter encoding, and a template-based specialization technique. cTLS
-is not directly interoperable with TLS 1.3, but it should eventually be
-possible for a cTLS/TLS 1.3 server to exist and successfully interoperate.
+tighter encoding, a template-based specialization technique, and  
+alternative cryptographic techniques. cTLS is not directly interoperable with 
+TLS 1.3, but it should eventually be possible for a cTLS/TLS 1.3 server 
+to exist and successfully interoperate.
 
 --- middle
 
@@ -56,15 +57,16 @@ should not be used as a basis for building production systems.
 
 This document specifies a "compact" version of TLS 1.3 {{!RFC8446}}. It is isomorphic
 to TLS 1.3 but designed to take up minimal bandwidth. The space reduction
-is achieved by four basic techniques:
+is achieved by five basic techniques:
 
 - Omitting unnecessary values that are a holdover from previous versions
   of TLS.
 - Omitting the fields and handshake messages required for preserving backwards-compatibility
   with earlier TLS versions.
-- More compact encodings.
+- More compact encodings, for example point compression.
 - A template-based specialization mechanism that allows pre-populating information 
-  at both endpoints without the need for negotiation. 
+  at both endpoints without the need for negotiation.
+- Alternative cryptographic techniques, such as semi-static Diffie-Hellman. 
 
 For the common (EC)DHE handshake with pre-established certificates, cTLS
 achieves an overhead of 45 bytes over the minimum required by the
@@ -84,49 +86,11 @@ document are to be interpreted as described in BCP 14 {{RFC2119}} {{!RFC8174}}
 when, and only when, they appear in all capitals, as shown here.
 
 Structure definitions listed below override TLS 1.3 definitions; any PDU
-not internally defined is taken from TLS 1.3 except for replacing integers
-with varints.
-
-# Common Primitives
-
-## Varints
-
-cTLS makes use of variable-length integers in order to allow a wide
-integer range while still providing for a minimal encoding. The
-width of the integer is encoded in the first two bits of the field
-as follows, with xs indicating bits that form part of the integer.
-
-| Bit pattern                | Length (bytes) |
-| :------------------------- | :------------- |
-| 0xxxxxxx                   | 1              |
-|                            |                |
-| 10xxxxxx xxxxxxxx          | 2              |
-|                            |                |
-| 11xxxxxx xxxxxxxx xxxxxxxx | 3              |
-
-Thus, one byte can be used to carry values up to 127.
-
-In the TLS syntax variable integers are denoted as "varint" and
-a vector with a top range of a varint is denoted as:
-
-~~~~~
-     opaque foo<1..V>;
-~~~~~
-
-cTLS uses the varint encoding for all multi-byte integers in TLS,
-including:
-
-* Values of type uint16, uint24, uint32, uint64
-* Array and vector entries of these types
-* Encoded lengths for vectors that allow more than 255 entries
-* Enums that allow more than 255 entries
-
-Values of type uint8, opaque values, and one-byte enums are not
-affected.  We do not show the structures which only change in this way.
+not internally defined is taken from TLS 1.3.
 
 ## Template-based Specialization
 
-The transmission overhead in TLS 1.3 is largely contributed to by two factors, 
+A significant transmission overhead in TLS 1.3 is contributed to by two factors, 
 :
 - the negotiation of algorithm parameters, and extensions,  as well as 
 - the exchange of certificates. 
@@ -408,7 +372,7 @@ profile.
 ~~~~
       struct {
           ContentType content_type = ctls_handshake;
-          varint profile_id; 
+          opaque profile_id<0..2^8-1>;
           opaque fragment<0..V>;
       } CTLSPlaintext;
 ~~~~
