@@ -1,0 +1,2591 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>Compact TLS 1.3</title>
+<meta content="Eric Rescorla" name="author">
+<meta content="Richard Barnes" name="author">
+<meta content="Hannes Tschofenig" name="author">
+<meta content="Benjamin M. Schwartz" name="author">
+<meta content='
+       This document specifies a "compact" version of TLS 1.3 and DTLS 1.3. It saves bandwidth
+by trimming obsolete material, tighter encoding, a template-based specialization technique,
+and alternative cryptographic techniques. cTLS is not directly interoperable with
+TLS 1.3 or DTLS 1.3 since the over-the-wire framing is different. A single server
+can, however, offer cTLS alongside TLS or DTLS. 
+    ' name="description">
+<meta content="xml2rfc 3.18.2" name="generator">
+<meta content="Internet-Draft" name="keyword">
+<meta content="draft-ietf-tls-ctls-latest" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.18.2
+    Python 3.11.6
+    ConfigArgParse 1.5.3
+    google-i18n-address 3.1.0
+    intervaltree 3.1.0
+    Jinja2 3.1.2
+    lxml 4.9.3
+    platformdirs 3.11.0
+    pycountry 22.3.5
+    PyYAML 6.0
+    requests 2.31.0
+    setuptools 67.7.2
+    six 1.16.0
+    wcwidth 0.2.8
+-->
+<link href="draft-ietf-tls-ctls.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Lora SemiBold'), local('Lora-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light dark;
+  --background-color: #fff;
+  --text-color: #222;
+  --title-color: #191919;
+  --link-color: #2a6496;
+  --highlight-color: #f9f9f9;
+  --line-color: #eee;
+  --pilcrow-weak: #ddd;
+  --pilcrow-strong: #bbb;
+  --small-font-size: 14.5px;
+  --font-mono: 'Oxygen Mono', monospace;
+  scrollbar-color: #bbb #eee;
+}
+body {
+  max-width: 600px;
+  margin: 75px auto;
+  padding: 0 5px;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  font: 16px/22px "Lora", serif;
+  scroll-behavior: smooth;
+}
+
+.ears {
+  display: none;
+}
+
+/* headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Cabin Condensed", sans-serif;
+  font-weight: 600;
+  margin: 0.8em 0 0.3em;
+  font-size-adjust: 0.5;
+  color: var(--title-color);
+}
+h1#title {
+  font-size: 32px;
+  line-height: 40px;
+  clear: both;
+}
+h1#title, h1#rfcnum {
+  margin: 1.5em 0 0.2em;
+}
+h1#rfcnum + h1#title {
+  margin: 0.2em 0;
+}
+
+h1, h2, h3 {
+  font-size: 22px;
+  line-height: 27px;
+}
+h4, h5, h6 {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+/* general structure */
+.author {
+  padding-bottom: 0.3em;
+}
+#abstract+p {
+  font-size: 18px;
+  line-height: 24px;
+}
+#abstract+p code, #abstract+p samp, #abstract+p tt {
+  font-size: 16px;
+  line-height: 0;
+}
+
+p {
+  padding: 0;
+  margin: 0.5em 0;
+  text-align: left;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+/* font-family isn't space-separated, but =~ will have to do */
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
+}
+.alignCenter.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+     support flexbox yet.
+  */
+  display: table;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 0.5em 2em;
+}
+:is(ol, ul) :is(ol, ul) {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+:is(ul, ol).compact, .ulCompact, .olCompact {
+  line-height: 1;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+  clear: left;
+  --indent: 3ch;
+  /* --indent: attr(indent ch); not supported in any browser, but we can dream */
+}
+dl.olPercent {
+  --indent: 5ch;
+}
+dl > dt {
+  float: left;
+  margin-right: 2ch;
+  min-width: 8ch;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+dl > dd {
+  margin-bottom: .8em;
+  margin-left: var(--indent) !important; /* stupid element overrides */
+  min-height: 2ex;
+}
+dl.olPercent > dt {
+  min-width: calc(var(--indent) - 2ch);
+}
+:is(dl.compact, .dlCompact) > dd {
+  margin-bottom: 0;
+}
+:is(dl.compact, .dlCompact) > dd > :is(:first-child, .break:first-child + *) {
+  margin-top: 0;
+}
+:is(dl.compact, .dlCompact) > dd > :is(:last-child) {
+  margin-bottom: 0;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+}
+:is(dd, span).break {
+  display: none;
+}
+
+/* links */
+a, a[href].selfRef:hover {
+  text-decoration: none;
+}
+a[href] {
+  color: var(--link-color);
+}
+a[href].selfRef, .iref + a[href].internal {
+  color: var(--text-color);
+}
+a[href]:hover {
+  text-decoration: underline;
+}
+a[href].selfRef:hover {
+  background-color: var(--highlight-color);
+}
+a.xref:is(.cite, .auto), :is(#status-of-memo, #copyright) a {
+  white-space: nowrap;
+}
+
+/* Figures */
+tt, code, pre {
+  background-color: var(--highlight-color);
+  font: 14px/22px var(--font-mono);
+}
+tt, code {
+  /* changing the font for inline elements leads to different ascender
+     and descender heights; as we want to retain baseline alignment,
+     remove leading to avoid altering the final height of lines
+     note: this fails if these blocks take an entire line,
+     a different solution would be great */
+  line-height: 0;
+}
+:is(h1, h2, h3, h4, h5, h6) :is(tt, code) {
+  font-size: 84%;
+}
+pre {
+  border: 1px solid var(--line-color);
+  font-size: 13.5px;
+  line-height: 16px;
+  letter-spacing: -0.2px;
+  margin: 5px;
+  padding: 5px;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0.5em 0;
+  padding: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption, caption {
+  font-style: italic;
+  margin: 0.5em 1.5em;
+  text-align: left;
+}
+@media screen {
+  /* Auto-collapse boilerplate. */
+  :is(#status-of-memo, #copyright) p {
+    margin: -2px 0;
+    max-height: 0;
+    transition: max-height 2s ease, margin 0.5s ease 0.5s;
+    overflow: hidden;
+  }
+  :is(#status-of-memo, #copyright):hover p,
+  :is(#status-of-memo, #copyright) h2:target ~ p {
+    margin: 0.5em 0;
+    max-height: 500px;
+    overflow: auto;
+  }
+  pre, svg {
+    display: inline-block;
+    overflow-x: auto;
+  }
+  pre {
+    max-width: 100%;
+    width: calc(100% - 22px - 1em);
+  }
+  svg {
+    max-width: calc(100% - 22px - 1em);
+  }
+  figure pre {
+    display: block;
+    width: calc(100% - 25px);
+  }
+  :is(pre, svg) + .pilcrow {
+    display: inline-block;
+    vertical-align: text-bottom;
+    padding-bottom: 8px;
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 0 2em;
+  font-style: italic;
+}
+blockquote {
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  max-width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+}
+table.right {
+  margin-left: auto;
+}
+table.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+table.left {
+  margin-right: auto;
+}
+thead, tbody {
+  border: 1px solid var(--line-color);
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 5px 10px;
+}
+th {
+  background-color: var(--line-color);
+}
+:is(tr:nth-child(2n), thead+tbody > tr:nth-child(2n+1)) > td {
+  background-color: var(--background-color);
+}
+:is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
+  background-color: var(--highlight-color);
+}
+table caption {
+  margin: 0;
+  padding: 3px 0 3px 1em;
+}
+table p {
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  margin-left: 3px;
+  opacity: 0.2;
+  user-select: none;
+}
+a.pilcrow[href] { color: var(--pilcrow-weak); }
+a.pilcrow[href]:hover { text-decoration: none; }
+@media not print {
+  :hover > a.pilcrow {
+    opacity: 1;
+  }
+  a.pilcrow[href]:hover {
+    color: var(--pilcrow-strong);
+    background-color: transparent;
+  }
+}
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid var(--line-color);
+}
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: var(--small-font-size);
+}
+.role {
+  font-variant: all-small-caps;
+}
+sub, sup {
+  line-height: 1;
+  font-size: 80%;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: var(--small-font-size);
+  line-height: 18px;
+  --identifier-width: 15ch;
+}
+#identifiers dt {
+  width: var(--identifier-width);
+  min-width: var(--identifier-width);
+  clear: left;
+  float: left;
+  text-align: right;
+  margin-right: 1ch;
+}
+#identifiers dd {
+  margin: 0;
+  margin-left: calc(1em + var(--identifier-width)) !important;
+  min-width: 5em;
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #999;
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+#toc nav ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+#toc nav li {
+  line-height: 1.3em;
+  margin: 2px 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+#toc a.xref {
+  white-space: normal;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 10ch;
+  margin-right: 1.5ch;
+}
+.references dt:target::before {
+  content: "⇒";
+  width: 15px;
+  margin: 0 10px 0 -25px;
+}
+.references dd {
+  margin-left: 12ch !important;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+#rfc\.index\.index + ul {
+  margin-left: 0;
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+@media (min-width: 500px) {
+  #authors-addresses > section {
+    column-count: 2;
+    column-gap: 20px;
+  }
+  #authors-addresses > section > h2 {
+    column-span: all;
+  }
+  /* hack for break-inside: avoid-column */
+  #authors-addresses address {
+    display: inline-block;
+    break-inside: avoid-column;
+  }
+}
+
+.rfcEditorRemove p:first-of-type {
+  font-style: italic;
+}
+.cref {
+  background-color: rgba(249, 232, 105, 0.3);
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 929px) {
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 1px 0 0 0;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+    opacity: 0.6;
+  }
+  #toc.active {
+      opacity: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 2px 0 2px 6px;
+    padding-right: 1em;
+    font-size: 18px;
+    line-height: 24px;
+    min-width: 190px;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 8px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    background-color: var(--background-color);
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+  #toc.active nav {
+    display: block;
+  }
+  /* Make the collapsed ToC header render white on gray also when it's a link */
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+  #toc a.toplink {
+    margin-top: 2px;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 930px) {
+  body {
+    padding-right: 360px;
+    padding-right: calc(min(180px + 20%, 500px));
+  }
+  #toc {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    right: calc(50vw - 480px);
+    width: 312px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 2em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  #toc nav > ul  {
+    margin-bottom: 2em;
+  }
+  #toc ul {
+    margin: 0 0 0 4px;
+    font-size: var(--small-font-size);
+  }
+  #toc ul :is(p, li) {
+    margin: 2px 0;
+    line-height: 22px;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre, .vcard {
+    page-break-inside: avoid;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  :is(h2, h3, h4, h5, h6)+*, dd {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+  .toplink {
+    display: none;
+  }
+}
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+}
+
+/* Changes introduced to fix issues found during implementation */
+
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin: 8px 0.5em 0;
+}
+
+/* Provide styling for table cell text alignment */
+table .text-left {
+  text-align: left;
+}
+table .text-center {
+  text-align: center;
+}
+table .text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact information look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 20em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Dark mode. */
+@media (prefers-color-scheme: dark) {
+:root {
+  --background-color: #121212;
+  --text-color: #f0f0f0;
+  --title-color: #fff;
+  --link-color: #4da4f0;
+  --highlight-color: #282828;
+  --line-color: #444;
+  --pilcrow-weak: #444;
+  --pilcrow-strong: #666;
+  scrollbar-color: #777 #333;
+}
+}
+
+/* SVG Trick: a prefix match works because only black and white are allowed */
+svg :is([stroke="black"], [stroke^="#000"]) {
+  stroke: var(--text-color);
+}
+svg :is([stroke="white"], [stroke^="#fff"]) {
+  stroke: var(--background-color);
+}
+svg :is([fill="black"], [fill^="#000"], :not([fill])) {
+  fill: var(--text-color);
+}
+svg :is([fill="white"], [fill^="#fff"]) {
+  fill: var(--background-color);
+}
+</style>
+
+</head>
+<body class="xml2rfc">
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">cTLS 1.3</td>
+<td class="right">October 2023</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Rescorla, et al.</td>
+<td class="center">Expires 25 April 2024</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">TLS Working Group</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-ietf-tls-ctls-latest</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2023-10-23" class="published">23 October 2023</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Standards Track</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2024-04-25">25 April 2024</time></dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">E. Rescorla</div>
+<div class="org">Windy Hill Systems, LLC</div>
+</div>
+<div class="author">
+      <div class="author-name">R. Barnes</div>
+<div class="org">Cisco</div>
+</div>
+<div class="author">
+      <div class="author-name">H. Tschofenig</div>
+</div>
+<div class="author">
+      <div class="author-name">B. Schwartz</div>
+<div class="org">Meta Platforms, Inc.</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">Compact TLS 1.3</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">This document specifies a "compact" version of TLS 1.3 and DTLS 1.3. It saves bandwidth
+by trimming obsolete material, tighter encoding, a template-based specialization technique,
+and alternative cryptographic techniques. cTLS is not directly interoperable with
+TLS 1.3 or DTLS 1.3 since the over-the-wire framing is different. A single server
+can, however, offer cTLS alongside TLS or DTLS.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 25 April 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2023 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Revised BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1">
+                <p id="section-toc.1-1.2.2.1.1"><a href="#section-2.1" class="auto internal xref">2.1</a>.  <a href="#name-template-based-specializati" class="internal xref">Template-based Specialization</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1.2.1">
+                    <p id="section-toc.1-1.2.2.1.2.1.1" class="keepWithNext"><a href="#section-2.1.1" class="auto internal xref">2.1.1</a>.  <a href="#name-initial-template-elements" class="internal xref">Initial template elements</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1.2.2">
+                    <p id="section-toc.1-1.2.2.1.2.2.1" class="keepWithNext"><a href="#section-2.1.2" class="auto internal xref">2.1.2</a>.  <a href="#name-static-vector-compression" class="internal xref">Static vector compression</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2">
+                <p id="section-toc.1-1.2.2.2.1"><a href="#section-2.2" class="auto internal xref">2.2</a>.  <a href="#name-record-layer" class="internal xref">Record Layer</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3">
+                <p id="section-toc.1-1.2.2.3.1"><a href="#section-2.3" class="auto internal xref">2.3</a>.  <a href="#name-ctls-handshake-layer" class="internal xref">cTLS Handshake Layer</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3.2.1">
+                    <p id="section-toc.1-1.2.2.3.2.1.1"><a href="#section-2.3.1" class="auto internal xref">2.3.1</a>.  <a href="#name-the-transport-layer" class="internal xref">The Transport layer</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3.2.2">
+                    <p id="section-toc.1-1.2.2.3.2.2.1"><a href="#section-2.3.2" class="auto internal xref">2.3.2</a>.  <a href="#name-the-transcript-layer" class="internal xref">The Transcript layer</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3.2.3">
+                    <p id="section-toc.1-1.2.2.3.2.3.1"><a href="#section-2.3.3" class="auto internal xref">2.3.3</a>.  <a href="#name-the-logical-layer" class="internal xref">The Logical layer</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-handshake-messages" class="internal xref">Handshake Messages</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-clienthello" class="internal xref">ClientHello</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-serverhello" class="internal xref">ServerHello</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-helloretryrequest" class="internal xref">HelloRetryRequest</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-examples" class="internal xref">Examples</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-adding-a-contenttype" class="internal xref">Adding a ContentType</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-template-keys" class="internal xref">Template Keys</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3">
+                <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="auto internal xref">6.3</a>.  <a href="#name-adding-a-ctls-template-mess" class="internal xref">Adding a cTLS Template message type</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.4">
+                <p id="section-toc.1-1.6.2.4.1"><a href="#section-6.4" class="auto internal xref">6.4</a>.  <a href="#name-activating-the-helloretryre" class="internal xref">Activating the HelloRetryRequest MessageType</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.5">
+                <p id="section-toc.1-1.6.2.5.1"><a href="#section-6.5" class="auto internal xref">6.5</a>.  <a href="#name-reserved-profiles" class="internal xref">Reserved profiles</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-example-exchange" class="internal xref">Example Exchange</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="introduction">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">This document specifies "compact" versions of TLS <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span> and DTLS
+<span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>, respectively known as "Stream cTLS" and "Datagram cTLS".  cTLS
+provides equivalent security and functionality to TLS and DTLS, but it is
+designed to take up minimal bandwidth. The space reduction
+is achieved by five basic techniques:<a href="#section-1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1-2.1">
+          <p id="section-1-2.1.1">Omitting unnecessary values that are a holdover from previous versions
+of TLS.<a href="#section-1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-1-2.2">
+          <p id="section-1-2.2.1">Omitting the fields and handshake messages required for preserving backwards-compatibility
+with earlier TLS versions.<a href="#section-1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-1-2.3">
+          <p id="section-1-2.3.1">More compact encodings.<a href="#section-1-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-1-2.4">
+          <p id="section-1-2.4.1">A template-based specialization mechanism that allows pre-populating information
+at both endpoints without the need for negotiation.<a href="#section-1-2.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-1-2.5">
+          <p id="section-1-2.5.1">Alternative cryptographic techniques, such as nonce truncation.<a href="#section-1-2.5.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-1-3">For the common (EC)DHE handshake with pre-established certificates, Stream cTLS
+achieves an overhead of 53 bytes over the minimum required by the
+cryptovariables.  For a PSK handshake, the overhead is 21 bytes.  An annotated
+handshake transcript can be found in <a href="#transcripts" class="auto internal xref">Appendix A</a>.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="section-1-4.1">
+          <p id="section-1-4.1.1">TODO: Make a PSK transcript and check the overhead.<a href="#section-1-4.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-1-5">cTLS supports the functionality of TLS and DTLS 1.3, and is forward-compatible
+to future versions of TLS and DTLS.  cTLS itself is versioned by
+<code>CTLSTemplate.version</code> (currently zero).<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-6">The compression of the handshake while preserving the security guarantees
+of TLS has been formally verified in <span>[<a href="#Comparse" class="cite xref">Comparse</a>]</span>.<a href="#section-1-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="conventions-and-definitions">
+<section id="section-2">
+      <h2 id="name-conventions-and-definitions">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-conventions-and-definitions" class="section-name selfRef">Conventions and Definitions</a>
+      </h2>
+<p id="section-2-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+"SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this
+document are to be interpreted as described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span>
+when, and only when, they appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">Structure definitions listed below override TLS 1.3 definitions; any PDU
+not internally defined is taken from TLS 1.3.<a href="#section-2-2" class="pilcrow">¶</a></p>
+<div id="template-based-specialization">
+<section id="section-2.1">
+        <h3 id="name-template-based-specializati">
+<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-template-based-specializati" class="section-name selfRef">Template-based Specialization</a>
+        </h3>
+<p id="section-2.1-1">A significant transmission overhead in TLS 1.3 is contributed to by two factors:<a href="#section-2.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.1-2.1">
+            <p id="section-2.1-2.1.1">the negotiation of algorithm parameters, and extensions,  as well as<a href="#section-2.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-2.1-2.2">
+            <p id="section-2.1-2.2.1">the exchange of certificates.<a href="#section-2.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-2.1-3">TLS 1.3 supports different credential types and modes that
+are impacted differently by a compression scheme. For example, TLS supports
+certificate-based authentication, raw public key-based authentication as well
+as pre-shared key (PSK)-based authentication. PSK-based authentication can be
+used with externally configured PSKs or with PSKs established through tickets.<a href="#section-2.1-3" class="pilcrow">¶</a></p>
+<p id="section-2.1-4">The basic idea of template-based specialization is that we start with the basic
+TLS 1.3 handshake, which is fully general and then remove degrees of freedom,
+eliding parts of the handshake which are used to express those degrees of
+freedom. For example, if we only support one version of TLS, then it
+is not necessary to have version negotiation and the
+supported_versions extension can be omitted.  Thus, each specialization
+produces a new protocol that preserves the security guarantees of TLS, but has
+its own unique handshake.<a href="#section-2.1-4" class="pilcrow">¶</a></p>
+<p id="section-2.1-5">By assuming that out-of-band agreements took place already prior to the start of
+the cTLS protocol exchange, the amount of data exchanged can be radically reduced.
+Because different clients may use different compression templates and because multiple
+compression templates may be available for use in different deployment environments,
+a client needs to inform the server about the profile it is planning to use. The
+profile field in the ClientHello serves this purpose.<a href="#section-2.1-5" class="pilcrow">¶</a></p>
+<p id="section-2.1-6">Although the template-based specialization mechanisms described here are general,
+we also include specific mechanism for certificate-based exchanges because those are
+where the most complexity and size reduction can be obtained. Most of the other exchanges in
+TLS 1.3 are highly optimized and do not require compression to be used.<a href="#section-2.1-6" class="pilcrow">¶</a></p>
+<p id="section-2.1-7">The compression profile defining the use of algorithms, algorithm parameters, and
+extensions is represented by the <code>CTLSTemplate</code> structure:<a href="#section-2.1-7" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.1-8">
+<pre>
+enum {
+  profile(0),
+  version(1),
+  cipher_suite(2),
+  dh_group(3),
+  signature_algorithm(4),
+  random(5),
+  mutual_auth(6),
+  handshake_framing(7),
+  client_hello_extensions(8),
+  server_hello_extensions(9),
+  encrypted_extensions(10),
+  certificate_request_extensions(11),
+  known_certificates(12),
+  finished_size(13),
+  optional(65535)
+} CTLSTemplateElementType;
+
+struct {
+  CTLSTemplateElementType type;
+  opaque data&lt;0..2^32-1&gt;;
+} CTLSTemplateElement;
+
+struct {
+  uint16 ctls_version = 0;
+  CTLSTemplateElement elements&lt;0..2^32-1&gt;
+} CTLSTemplate;
+</pre><a href="#section-2.1-8" class="pilcrow">¶</a>
+</div>
+<p id="section-2.1-9">Elements in a <code>CTLSTemplate</code> MUST appear sorted by the type field in strictly
+ascending order.  The initial elements are defined in the subsections below.
+Future elements can be added via an IANA registry (<a href="#template-keys" class="auto internal xref">Section 6.2</a>).  When
+generating a template, all elements are OPTIONAL to include.  When processing
+a template, all elements are mandatory to understand (but see discussion of
+<code>optional</code> in <a href="#optional" class="auto internal xref">Section 2.1.1.11</a>).<a href="#section-2.1-9" class="pilcrow">¶</a></p>
+<p id="section-2.1-10">For ease of configuration, an equivalent JSON dictionary format is also defined.
+It consists of a dictionary whose keys are the name of each element type (converted
+from snake_case to camelCase), and whose values are a type-specific representation
+of the element intended to maximize legibility.  The cTLS version is represented
+by the key "ctlsVersion", whose value is an integer, defaulting to 0 if omitted.<a href="#section-2.1-10" class="pilcrow">¶</a></p>
+<p id="section-2.1-11">For example, the following specialization describes a protocol with a single fixed
+version (TLS 1.3) and a single fixed cipher suite (TLS_AES_128_GCM_SHA256). On the
+wire, ClientHello.cipher_suites, ServerHello.cipher_suites, and the
+supported_versions extensions in the ClientHello and ServerHello would be omitted.<a href="#section-2.1-11" class="pilcrow">¶</a></p>
+<div class="lang-JSON sourcecode" id="section-2.1-12">
+<pre>
+{
+  "ctlsVersion": 0,
+  "profile": "0001020304050607",
+  "version": 772,
+  "cipherSuite": "TLS_AES_128_GCM_SHA256"
+}
+</pre><a href="#section-2.1-12" class="pilcrow">¶</a>
+</div>
+<div id="initial-template-elements">
+<section id="section-2.1.1">
+          <h4 id="name-initial-template-elements">
+<a href="#section-2.1.1" class="section-number selfRef">2.1.1. </a><a href="#name-initial-template-elements" class="section-name selfRef">Initial template elements</a>
+          </h4>
+<div id="profile">
+<section id="section-2.1.1.1">
+            <h5 id="name-profile">
+<a href="#section-2.1.1.1" class="section-number selfRef">2.1.1.1. </a><a href="#name-profile" class="section-name selfRef"><code>profile</code></a>
+            </h5>
+<p id="section-2.1.1.1-1">This element identifies the profile being defined.  Its binary value is:<a href="#section-2.1.1.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.1.1.1-2">
+<pre>
+opaque ProfileID&lt;1..2^8-1&gt;
+</pre><a href="#section-2.1.1.1-2" class="pilcrow">¶</a>
+</div>
+<p id="section-2.1.1.1-3">This encodes the profile ID, if one is specified.  IDs whose
+decoded length is 4 bytes or less are reserved (see <a href="#reserved-profiles" class="auto internal xref">Section 6.5</a>). When a
+reserved value is used (including the default value), other keys MUST NOT appear
+in the template, and a client MUST NOT accept the template unless it recognizes
+the ID.<a href="#section-2.1.1.1-3" class="pilcrow">¶</a></p>
+<p id="section-2.1.1.1-4">In JSON, the profile ID is represented as a hexadecimal-encoded string.<a href="#section-2.1.1.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="version">
+<section id="section-2.1.1.2">
+            <h5 id="name-version">
+<a href="#section-2.1.1.2" class="section-number selfRef">2.1.1.2. </a><a href="#name-version" class="section-name selfRef"><code>version</code></a>
+            </h5>
+<p id="section-2.1.1.2-1">Value: a single <code>ProtocolVersion</code> (<span>[<a href="#RFC8446" class="cite xref">RFC8446</a>], <a href="https://rfc-editor.org/rfc/rfc8446#section-4.1.2" class="relref">Section 4.1.2</a></span>) that both parties agree to use. For TLS 1.3, the <code>ProtocolVersion</code> is 0x0304.<a href="#section-2.1.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.1.1.2-2">When this element is included, the <code>supported_versions</code> extension
+is omitted from <code>ClientHello.extensions</code>.<a href="#section-2.1.1.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.1.1.2-3">In JSON, the version is represented as an integer (772 = 0x0304 for TLS 1.3).<a href="#section-2.1.1.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="ciphersuite">
+<section id="section-2.1.1.3">
+            <h5 id="name-cipher_suite">
+<a href="#section-2.1.1.3" class="section-number selfRef">2.1.1.3. </a><a href="#name-cipher_suite" class="section-name selfRef"><code>cipher_suite</code></a>
+            </h5>
+<p id="section-2.1.1.3-1">Value: a single <code>CipherSuite</code> (<span>[<a href="#RFC8446" class="cite xref">RFC8446</a>], <a href="https://rfc-editor.org/rfc/rfc8446#section-4.1.2" class="relref">Section 4.1.2</a></span>) that both parties agree to use.<a href="#section-2.1.1.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.1.1.3-2">When this element is included, the <code>ClientHello.cipher_suites</code> and
+<code>ServerHello.cipher_suite</code> fields are omitted.<a href="#section-2.1.1.3-2" class="pilcrow">¶</a></p>
+<p id="section-2.1.1.3-3">In JSON, the cipher suite is represented using the "TLS_AEAD_HASH" syntax
+defined in <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>], <a href="https://rfc-editor.org/rfc/rfc8446#section-8.4" class="relref">Section 8.4</a></span>.<a href="#section-2.1.1.3-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="dhgroup">
+<section id="section-2.1.1.4">
+            <h5 id="name-dh_group">
+<a href="#section-2.1.1.4" class="section-number selfRef">2.1.1.4. </a><a href="#name-dh_group" class="section-name selfRef"><code>dh_group</code></a>
+            </h5>
+<p id="section-2.1.1.4-1">Value: a single <code>CTLSKeyShareGroup</code> to use for key establishment.<a href="#section-2.1.1.4-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.1.1.4-2">
+<pre>
+struct {
+    NamedGroup group_name;
+    uint16 key_share_length;
+} CTLSKeyShareGroup;
+</pre><a href="#section-2.1.1.4-2" class="pilcrow">¶</a>
+</div>
+<p id="section-2.1.1.4-3">This is equivalent to adding a "supported_groups" extension to every message
+where that is allowed (i.e. ClientHello and EncryptedExtensions, in TLS 1.3)
+consisting solely of the group <code>CTLSKeyShareGroup.group_name</code>.<a href="#section-2.1.1.4-3" class="pilcrow">¶</a></p>
+<p id="section-2.1.1.4-4">Static vectors (see <a href="#static-vectors" class="auto internal xref">Section 2.1.2</a>):<a href="#section-2.1.1.4-4" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.1.1.4-5.1">
+                <p id="section-2.1.1.4-5.1.1"><code>KeyShareClientHello.client_shares</code><a href="#section-2.1.1.4-5.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-2.1.1.4-5.2">
+                <p id="section-2.1.1.4-5.2.1"><code>KeyShareEntry.key_exchange</code>, if <code>CTLSKeyShareGroup.key_share_length</code> is non-zero.<a href="#section-2.1.1.4-5.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+<p id="section-2.1.1.4-6">In JSON, this value is represented as a dictionary with two keys:<a href="#section-2.1.1.4-6" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.1.1.4-7.1">
+                <p id="section-2.1.1.4-7.1.1"><code>groupName</code>: a string containing the code point name from the TLS Supported Groups registry (e.g., "x25519").<a href="#section-2.1.1.4-7.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-2.1.1.4-7.2">
+                <p id="section-2.1.1.4-7.2.1"><code>keyShareLength</code>: an integer, defaulting to zero if omitted.<a href="#section-2.1.1.4-7.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</section>
+</div>
+<div id="signaturealgorithm">
+<section id="section-2.1.1.5">
+            <h5 id="name-signature_algorithm">
+<a href="#section-2.1.1.5" class="section-number selfRef">2.1.1.5. </a><a href="#name-signature_algorithm" class="section-name selfRef"><code>signature_algorithm</code></a>
+            </h5>
+<p id="section-2.1.1.5-1">Value: a single <code>CTLSSignatureAlgorithm</code> to use for authentication.<a href="#section-2.1.1.5-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.1.1.5-2">
+<pre>
+struct {
+    SignatureScheme signature_scheme;
+    uint16 signature_length;
+} CTLSSignatureAlgorithm;
+</pre><a href="#section-2.1.1.5-2" class="pilcrow">¶</a>
+</div>
+<p id="section-2.1.1.5-3">This is equivalent to a placing a literal "signature_algorithms" extension
+consisting solely of <code>CTLSSignatureAlgorithm.signature_scheme</code> in every extensions field where the "signature_algorithms" extension is
+permitted to appear (i.e. ClientHello and CertificateRequest, in TLS 1.3).  When this element is included,
+<code>CertificateVerify.algorithm</code> is omitted.<a href="#section-2.1.1.5-3" class="pilcrow">¶</a></p>
+<p id="section-2.1.1.5-4">Static vectors (see <a href="#static-vectors" class="auto internal xref">Section 2.1.2</a>):<a href="#section-2.1.1.5-4" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.1.1.5-5.1">
+                <p id="section-2.1.1.5-5.1.1"><code>CertificateVerify.signature</code>, if <code>CTLSSignatureAlgorithm.signature_length</code> is non-zero.<a href="#section-2.1.1.5-5.1.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+<p id="section-2.1.1.5-6">In JSON, the
+signature algorithm is listed by the code point name in <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>], <a href="https://rfc-editor.org/rfc/rfc8446#section-4.2.3" class="relref">Section 4.2.3</a></span>. (e.g., ecdsa_secp256r1_sha256).
+In JSON, this value is represented as a dictionary with two keys:<a href="#section-2.1.1.5-6" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.1.1.5-7.1">
+                <p id="section-2.1.1.5-7.1.1"><code>signatureScheme</code>: a string containing the code point name in the TLS SignatureScheme registry (e.g., "ecdsa_secp256r1_sha256").<a href="#section-2.1.1.5-7.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-2.1.1.5-7.2">
+                <p id="section-2.1.1.5-7.2.1"><code>signatureLength</code>: an integer, defaulting to zero if omitted.<a href="#section-2.1.1.5-7.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</section>
+</div>
+<div id="random">
+<section id="section-2.1.1.6">
+            <h5 id="name-random">
+<a href="#section-2.1.1.6" class="section-number selfRef">2.1.1.6. </a><a href="#name-random" class="section-name selfRef"><code>random</code></a>
+            </h5>
+<p id="section-2.1.1.6-1">Value: a single <code>uint8</code>.<a href="#section-2.1.1.6-1" class="pilcrow">¶</a></p>
+<p id="section-2.1.1.6-2">The <code>ClientHello.Random</code> and <code>ServerHello.Random</code> values
+are truncated to the given length.  Where a 32-byte <code>Random</code> is
+required, the Random is padded to the right with 0s and the
+anti-downgrade mechanism in <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>], <a href="https://rfc-editor.org/rfc/rfc8446#section-4.1.3" class="relref">Section 4.1.3</a></span> is disabled.
+IMPORTANT: Using short Random values can lead to potential
+attacks. The Random length MUST be less than or equal to 32 bytes.<a href="#section-2.1.1.6-2" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="section-2.1.1.6-3.1">
+                <p id="section-2.1.1.6-3.1.1">OPEN ISSUE: Karthik Bhargavan suggested the idea of hashing
+ephemeral public keys and to use the result (truncated to 32 bytes)
+as random values. Such a change would require a security analysis.<a href="#section-2.1.1.6-3.1.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+<p id="section-2.1.1.6-4">In JSON, the length is represented as an integer.<a href="#section-2.1.1.6-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="mutualauth">
+<section id="section-2.1.1.7">
+            <h5 id="name-mutual_auth">
+<a href="#section-2.1.1.7" class="section-number selfRef">2.1.1.7. </a><a href="#name-mutual_auth" class="section-name selfRef"><code>mutual_auth</code></a>
+            </h5>
+<p id="section-2.1.1.7-1">Value: a single <code>uint8</code>, with 1 representing "true" and 0 representing
+"false".  All other values are forbidden.<a href="#section-2.1.1.7-1" class="pilcrow">¶</a></p>
+<p id="section-2.1.1.7-2">If set to true, this element indicates that the client must authenticate with
+a certificate by sending Certificate and a CertificateVerify message.
+If the CertificateRequest message does not add information not already
+conveyed in the template, the server SHOULD omit it.<a href="#section-2.1.1.7-2" class="pilcrow">¶</a></p>
+<p id="section-2.1.1.7-3">In JSON, this value is represented as <code>true</code> or <code>false</code>.<a href="#section-2.1.1.7-3" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="section-2.1.1.7-4.1">
+                <p id="section-2.1.1.7-4.1.1">TODO: It seems like there was an intent to elide the
+<code>Certificate.certificate_request_context</code> field, but this is not stated
+explicitly anywhere.<a href="#section-2.1.1.7-4.1.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</section>
+</div>
+<div id="handshakeframing">
+<section id="section-2.1.1.8">
+            <h5 id="name-handshake_framing">
+<a href="#section-2.1.1.8" class="section-number selfRef">2.1.1.8. </a><a href="#name-handshake_framing" class="section-name selfRef"><code>handshake_framing</code></a>
+            </h5>
+<p id="section-2.1.1.8-1">Value: <code>uint8</code>, with 0 indicating "false" and 1 indicating "true".
+If true, handshake messages MUST be conveyed inside a <code>Handshake</code>
+(<span>[<a href="#RFC8446" class="cite xref">RFC8446</a>], <a href="https://rfc-editor.org/rfc/rfc8446#section-4" class="relref">Section 4</a></span>) struct on reliable, ordered transports, or a
+<code>DTLSHandshake</code> (<span>[<a href="#RFC9147" class="cite xref">RFC9147</a>], <a href="https://rfc-editor.org/rfc/rfc9147#section-5.2" class="relref">Section 5.2</a></span>) struct otherwise,
+and MAY be broken into multiple records as in TLS and DTLS.  If false,
+each handshake message is conveyed in a <code>CTLSHandshake</code> or
+<code>CTLSDatagramHandshake</code> struct (<a href="#ctlshandshake" class="auto internal xref">Section 2.3</a>), which MUST be the payload
+of a single record.<a href="#section-2.1.1.8-1" class="pilcrow">¶</a></p>
+<p id="section-2.1.1.8-2">In JSON, this value is represented as <code>true</code> or <code>false</code>.<a href="#section-2.1.1.8-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="clienthelloextensions-serverhelloextensions-encryptedextensions-and-certificaterequestextensions">
+<section id="section-2.1.1.9">
+            <h5 id="name-client_hello_extensions-ser">
+<a href="#section-2.1.1.9" class="section-number selfRef">2.1.1.9. </a><a href="#name-client_hello_extensions-ser" class="section-name selfRef"><code>client_hello_extensions</code>, <code>server_hello_extensions</code>, <code>encrypted_extensions</code>, and <code>certificate_request_extensions</code></a>
+            </h5>
+<p id="section-2.1.1.9-1">Value: a single <code>CTLSExtensionTemplate</code> struct:<a href="#section-2.1.1.9-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.1.1.9-2">
+<pre>
+struct {
+  Extension predefined_extensions&lt;0..2^16-1&gt;;
+  ExtensionType expected_extensions&lt;0..2^16-1&gt;;
+  ExtensionType self_delimiting_extensions&lt;0..2^16-1&gt;;
+  uint8 allow_additional;
+} CTLSExtensionTemplate;
+</pre><a href="#section-2.1.1.9-2" class="pilcrow">¶</a>
+</div>
+<p id="section-2.1.1.9-3">The <code>predefined_extensions</code> field indicates extensions that should be treated
+as if they were included in the corresponding message.  This allows these
+extensions to be omitted entirely.<a href="#section-2.1.1.9-3" class="pilcrow">¶</a></p>
+<p id="section-2.1.1.9-4">The <code>expected_extensions</code> field indicates extensions that must be included
+in the corresponding message, at the beginning of its <code>extensions</code> field.
+The types of these extensions are omitted when serializing the <code>extensions</code>
+field of the corresponding message.<a href="#section-2.1.1.9-4" class="pilcrow">¶</a></p>
+<p id="section-2.1.1.9-5">The <code>self_delimiting_extensions</code> field indicates extensions whose data is
+self-delimiting. The cTLS implementation MUST be able to parse all these
+extensions, and all extensions listed in <span><a href="https://rfc-editor.org/rfc/rfc8446#section-4.2" class="relref">Section 4.2</a> of [<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>.<a href="#section-2.1.1.9-5" class="pilcrow">¶</a></p>
+<p id="section-2.1.1.9-6">The <code>allow_additional</code> field MUST be 0 (false) or 1 (true), indicating whether
+additional extensions are allowed here.<a href="#section-2.1.1.9-6" class="pilcrow">¶</a></p>
+<p id="section-2.1.1.9-7"><code>predefined_extensions</code> and <code>expected_extensions</code> MUST be in strictly ascending
+order by <code>ExtensionType</code>, and a single <code>ExtensionType</code> MUST NOT appear in both
+lists.  If the <code>version</code>, <code>dh_group</code>, or <code>signature_algorithm</code> element appears
+in the template, the corresponding <code>ExtensionType</code> MUST NOT appear here.  The
+<code>pre_shared_key</code> <code>ExtensionType</code> MUST NOT appear in either list.<a href="#section-2.1.1.9-7" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="section-2.1.1.9-8.1">
+                <p id="section-2.1.1.9-8.1.1">OPEN ISSUE: Are there other extensions that would benefit from special
+treatment, as opposed to hex values.<a href="#section-2.1.1.9-8.1.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+<p id="section-2.1.1.9-9">Static vectors (see <a href="#static-vectors" class="auto internal xref">Section 2.1.2</a>):<a href="#section-2.1.1.9-9" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.1.1.9-10.1">
+                <p id="section-2.1.1.9-10.1.1"><code>Extension.extension_data</code> for any extension whose type is in
+<code>self_delimiting_extensions</code>, or is listed in
+<span><a href="https://rfc-editor.org/rfc/rfc8446#section-4.2" class="relref">Section 4.2</a> of [<a href="#RFC8446" class="cite xref">RFC8446</a>]</span> except <code>padding</code>.  This applies only to the corresponding message.<a href="#section-2.1.1.9-10.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-2.1.1.9-10.2">
+                <p id="section-2.1.1.9-10.2.1">The <code>extensions</code> field of the corresponding message, if <code>allow_additional</code> is false.<a href="#section-2.1.1.9-10.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+<p id="section-2.1.1.9-11">In JSON, this value is represented as a dictionary with three keys:<a href="#section-2.1.1.9-11" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.1.1.9-12.1">
+                <p id="section-2.1.1.9-12.1.1"><code>predefinedExtensions</code>: a dictionary mapping <code>ExtensionType</code> names (<span>[<a href="#RFC8446" class="cite xref">RFC8446</a>], <a href="https://rfc-editor.org/rfc/rfc8446#section-4.2" class="relref">Section 4.2</a></span>) to values encoded as hexadecimal strings.<a href="#section-2.1.1.9-12.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-2.1.1.9-12.2">
+                <p id="section-2.1.1.9-12.2.1"><code>expectedExtensions</code>: an array of <code>ExtensionType</code> names.<a href="#section-2.1.1.9-12.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-2.1.1.9-12.3">
+                <p id="section-2.1.1.9-12.3.1"><code>selfDelimitingExtensions</code>: an array of <code>ExtensionType</code> names.<a href="#section-2.1.1.9-12.3.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-2.1.1.9-12.4">
+                <p id="section-2.1.1.9-12.4.1"><code>allowAdditional</code>: <code>true</code> or <code>false</code>.<a href="#section-2.1.1.9-12.4.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+<p id="section-2.1.1.9-13">If <code>predefinedExtensions</code> or <code>expectedExtensions</code> is empty, it MAY be omitted.<a href="#section-2.1.1.9-13" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="section-2.1.1.9-14.1">
+                <p id="section-2.1.1.9-14.1.1">OPEN ISSUE: Should we have a <code>certificate_entry_extensions</code> element?<a href="#section-2.1.1.9-14.1.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</section>
+</div>
+<div id="finishedsize">
+<section id="section-2.1.1.10">
+            <h5 id="name-finished_size">
+<a href="#section-2.1.1.10" class="section-number selfRef">2.1.1.10. </a><a href="#name-finished_size" class="section-name selfRef"><code>finished_size</code></a>
+            </h5>
+<p id="section-2.1.1.10-1">Value: <code>uint8</code>, indicating that the Finished value is to be truncated to the given
+length.<a href="#section-2.1.1.10-1" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="section-2.1.1.10-2.1">
+                <p id="section-2.1.1.10-2.1.1">OPEN ISSUE: How short should we allow this to be? TLS 1.3 uses
+the native hash and TLS 1.2 used 12 bytes. More analysis is needed
+to know the minimum safe Finished size. See <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>], <a href="https://rfc-editor.org/rfc/rfc8446#appendix-E.1" class="relref">Appendix E.1</a></span>
+for more on this, as well as
+https://mailarchive.ietf.org/arch/msg/tls/TugB5ddJu3nYg7chcyeIyUqWSbA.
+The minimum safe size may vary depending on whether the template was
+learned via a trusted channel.<a href="#section-2.1.1.10-2.1.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+<p id="section-2.1.1.10-3">In JSON, this length is represented as an integer.<a href="#section-2.1.1.10-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="optional">
+<section id="section-2.1.1.11">
+            <h5 id="name-optional">
+<a href="#section-2.1.1.11" class="section-number selfRef">2.1.1.11. </a><a href="#name-optional" class="section-name selfRef"><code>optional</code></a>
+            </h5>
+<p id="section-2.1.1.11-1">Value: a <code>CTLSTemplate</code> containing elements that are not required to be understood
+by the client.  Server operators MUST NOT place an element in this section unless
+the server is able to determine whether the client is using it from the client data
+it receives. A key MUST NOT appear in both the main template and the optional
+section.<a href="#section-2.1.1.11-1" class="pilcrow">¶</a></p>
+<p id="section-2.1.1.11-2">In JSON, this value is represented in the same way as the <code>CTLSTemplate</code> itself.<a href="#section-2.1.1.11-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="known-certs">
+<section id="section-2.1.1.12">
+            <h5 id="name-known_certificates">
+<a href="#section-2.1.1.12" class="section-number selfRef">2.1.1.12. </a><a href="#name-known_certificates" class="section-name selfRef"><code>known_certificates</code></a>
+            </h5>
+<p id="section-2.1.1.12-1">Value: a <code>CertificateMap</code> struct:<a href="#section-2.1.1.12-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.1.1.12-2">
+<pre>
+struct {
+  opaque id&lt;1..2^8-1&gt;;
+  opaque cert_data&lt;1..2^16-1&gt;;
+} CertificateMapEntry;
+
+struct {
+  CertificateMapEntry entries&lt;2..2^24-1&gt;;
+} CertificateMap;
+</pre><a href="#section-2.1.1.12-2" class="pilcrow">¶</a>
+</div>
+<p id="section-2.1.1.12-3">Entries in the certificate map must appear in strictly ascending lexicographic
+order by ID.<a href="#section-2.1.1.12-3" class="pilcrow">¶</a></p>
+<p id="section-2.1.1.12-4">In JSON, <code>CertificateMap</code> is represented as a dictionary from <code>id</code> to <code>cert_data</code>,
+which are both represented as hexademical strings:<a href="#section-2.1.1.12-4" class="pilcrow">¶</a></p>
+<div class="lang-JSON sourcecode" id="section-2.1.1.12-5">
+<pre>
+{
+  "00": "3082...",
+  "01": "3082...",
+}
+</pre><a href="#section-2.1.1.12-5" class="pilcrow">¶</a>
+</div>
+<p id="section-2.1.1.12-6">Certificates are a major contributor to the size of a TLS handshake.  In order
+to avoid this overhead when the parties to a handshake have already exchanged
+certificates, a compression profile can specify a dictionary of "known
+certificates" that effectively acts as a compression dictionary on certificates.<a href="#section-2.1.1.12-6" class="pilcrow">¶</a></p>
+<p id="section-2.1.1.12-7">When compressing a Certificate message, the sender examines the cert_data field
+of each CertificateEntry.  If the cert_data matches a value in the known
+certificates object, then the sender replaces the cert_data with the
+corresponding key.  Decompression works the opposite way, replacing keys with
+values.<a href="#section-2.1.1.12-7" class="pilcrow">¶</a></p>
+<p id="section-2.1.1.12-8">Note that in this scheme, there is no signaling on the wire for whether a given
+cert_data value is compressed or uncompressed.  Known certificates objects
+SHOULD be constructed in such a way as to avoid a uncompressed object being
+mistaken for compressed one and erroneously decompressed.  For X.509, it is
+sufficient for the first byte of the compressed value (key) to have a value
+other than 0x30, since every X.509 certificate starts with this byte.<a href="#section-2.1.1.12-8" class="pilcrow">¶</a></p>
+<p id="section-2.1.1.12-9">This element can be used to compress both client and server certificates.
+However, in most deployments where client certificates are used, it would be
+inefficient to encode all client certificates into a single profile.  Instead,
+deployments can define a unique profile for each client, distinguished by
+the profile ID.  Note that the profile ID is sent in cleartext, so this
+strategy has significant privacy implications.<a href="#section-2.1.1.12-9" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="static-vectors">
+<section id="section-2.1.2">
+          <h4 id="name-static-vector-compression">
+<a href="#section-2.1.2" class="section-number selfRef">2.1.2. </a><a href="#name-static-vector-compression" class="section-name selfRef">Static vector compression</a>
+          </h4>
+<p id="section-2.1.2-1">Some cTLS template elements imply that certain vectors (as defined in <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>], <a href="https://rfc-editor.org/rfc/rfc8446#section-3.4" class="relref">Section 3.4</a></span>) have a fixed number of elements during the handshake.  These
+template elements note these "static vectors" in their definition.  When encoding
+a "static vector", its length prefix is omitted.<a href="#section-2.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.1.2-2">For example, suppose that the cTLS template is:<a href="#section-2.1.2-2" class="pilcrow">¶</a></p>
+<div class="lang-JSON sourcecode" id="section-2.1.2-3">
+<pre>
+{
+  "ctlsVersion": 0,
+  "version": 772,
+  "dhGroup": {
+    "groupName": "x25519",
+    "keyShareLength": 32
+  },
+  "clientHelloExtensions": {
+    "expectedExtensions": ["key_share"],
+    "allowAdditional": false
+  }
+}
+</pre><a href="#section-2.1.2-3" class="pilcrow">¶</a>
+</div>
+<p id="section-2.1.2-4">Then, the following structure:<a href="#section-2.1.2-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.1.2-5">
+<pre>
+   28                 // length(extensions)
+   33 26              // extension_type = KeyShare
+     0024             // length(client_shares)
+       001d           // KeyShareEntry.group
+       0020           // length(KeyShareEntry.key_exchange)
+         a690...af948 // KeyShareEntry.key_exchange
+</pre><a href="#section-2.1.2-5" class="pilcrow">¶</a>
+</div>
+<p id="section-2.1.2-6">is compressed down to:<a href="#section-2.1.2-6" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.1.2-7">
+<pre>
+   a690...af948 // KeyShareEntry.key_exchange
+</pre><a href="#section-2.1.2-7" class="pilcrow">¶</a>
+</div>
+<p id="section-2.1.2-8">according to the following rationale:<a href="#section-2.1.2-8" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.1.2-9.1">
+              <p id="section-2.1.2-9.1.1">The length of <code>extensions</code> is omitted because <code>allowAdditional</code> is false, so
+the number of items in <code>extensions</code> (i.e., 1) is known in advance.<a href="#section-2.1.2-9.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.1.2-9.2">
+              <p id="section-2.1.2-9.2.1"><code>extension_type</code> is omitted because it is specified by <code>expected_extensions</code>.<a href="#section-2.1.2-9.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.1.2-9.3">
+              <p id="section-2.1.2-9.3.1">The length of <code>client_shares</code> is omitted because the use of <code>dhGroup</code> implies
+that there can only be one <code>KeyShareEntry</code>.<a href="#section-2.1.2-9.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.1.2-9.4">
+              <p id="section-2.1.2-9.4.1"><code>KeyShareEntry.group</code> is omitted because it is specified by <code>dhGroup</code>.<a href="#section-2.1.2-9.4.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.1.2-9.5">
+              <p id="section-2.1.2-9.5.1">The length of the <code>key_exchange</code> is omitted because the "x25519" key share
+has a fixed size (32 bytes).<a href="#section-2.1.2-9.5.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</section>
+</div>
+</section>
+</div>
+<div id="record-layer">
+<section id="section-2.2">
+        <h3 id="name-record-layer">
+<a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-record-layer" class="section-name selfRef">Record Layer</a>
+        </h3>
+<p id="section-2.2-1">The only cTLS records that are sent in plaintext are handshake records
+(ClientHello and ServerHello/HRR) and alerts. cTLS alerts are the same
+as TLS/DTLS alerts and use the same content types.  For handshake records,
+we set the <code>content_type</code> field to a fixed cTLS-specific value to
+distinguish cTLS plaintext records from encrypted records, TLS/DTLS
+records, and other protocols using the same 5-tuple.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.2-2">
+<pre>
+      struct {
+          ContentType content_type = ctls_handshake;
+          opaque profile_id&lt;0..2^8-1&gt;;
+          opaque fragment&lt;0..2^16-1&gt;;
+      } CTLSClientPlaintext;
+</pre><a href="#section-2.2-2" class="pilcrow">¶</a>
+</div>
+<p id="section-2.2-3">The <code>profile_id</code> field MUST identify the profile that is in use. A
+zero-length ID corresponds to the cTLS default protocol.
+The server's reply does not include the <code>profile_id</code>, because the server
+must be using the same profile indicated by the client.<a href="#section-2.2-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.2-4">
+<pre>
+      struct {
+          ContentType content_type = ctls_handshake;
+          opaque fragment&lt;0..2^16-1&gt;;
+      } CTLSServerPlaintext;
+</pre><a href="#section-2.2-4" class="pilcrow">¶</a>
+</div>
+<p id="section-2.2-5">Encrypted records use DTLS 1.3 <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span> record framing, comprising a configuration octet
+followed by optional connection ID, sequence number, and length fields. The
+encryption process and additional data are also as described in DTLS.<a href="#section-2.2-5" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.2-6">
+<pre>
+      0 1 2 3 4 5 6 7
+      +-+-+-+-+-+-+-+-+
+      |0|0|1|C|S|L|E E|
+      +-+-+-+-+-+-+-+-+
+      | Connection ID |   Legend:
+      | (if any,      |
+      /  length as    /   C   - Connection ID (CID) present
+      |  negotiated)  |   S   - Sequence number length
+      +-+-+-+-+-+-+-+-+   L   - Length present
+      | 8 or 16 bit   |   E   - Epoch
+      |Sequence Number|
+      | (if present)  |
+      +-+-+-+-+-+-+-+-+
+      | 16 bit Length |
+      | (if present)  |
+      +-+-+-+-+-+-+-+-+
+
+      struct {
+          opaque unified_hdr[variable];
+          opaque encrypted_record[length];
+      } CTLSCiphertext;
+</pre><a href="#section-2.2-6" class="pilcrow">¶</a>
+</div>
+<p id="section-2.2-7">The presence and size of the connection ID field is negotiated as in DTLS.<a href="#section-2.2-7" class="pilcrow">¶</a></p>
+<p id="section-2.2-8">As with DTLS, the length field MAY be omitted by clearing the L bit, which means
+that the record consumes the entire rest of the data in the lower level
+transport.  In this case it is not possible to have multiple DTLSCiphertext
+format records without length fields in the same datagram.  In stream-oriented
+transports (e.g., TCP), the length field MUST be present. For use over other
+transports length information may be inferred from the underlying layer.<a href="#section-2.2-8" class="pilcrow">¶</a></p>
+<p id="section-2.2-9">Normal DTLS does not provide a mechanism for suppressing the sequence number
+field entirely. When a reliable, ordered transport (e.g., TCP) is in use, the
+S bit in the configuration octet MUST be cleared and the sequence number
+MUST be omitted. When an unreliable transport is in use, the S bit
+has its usual meaning and the sequence number MUST be included.<a href="#section-2.2-9" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="ctlshandshake">
+<section id="section-2.3">
+        <h3 id="name-ctls-handshake-layer">
+<a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-ctls-handshake-layer" class="section-name selfRef">cTLS Handshake Layer</a>
+        </h3>
+<p id="section-2.3-1">The cTLS handshake is modeled in three layers:<a href="#section-2.3-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-2.3-2">
+<li id="section-2.3-2.1">
+            <p id="section-2.3-2.1.1">The Transport layer<a href="#section-2.3-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-2.3-2.2">
+            <p id="section-2.3-2.2.1">The Transcript layer<a href="#section-2.3-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-2.3-2.3">
+            <p id="section-2.3-2.3.1">The Logical layer<a href="#section-2.3-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ol>
+<div id="the-transport-layer">
+<section id="section-2.3.1">
+          <h4 id="name-the-transport-layer">
+<a href="#section-2.3.1" class="section-number selfRef">2.3.1. </a><a href="#name-the-transport-layer" class="section-name selfRef">The Transport layer</a>
+          </h4>
+<p id="section-2.3.1-1">When <code>template.handshake_framing</code> is false, the cTLS transport layer
+uses a custom handshake
+framing that saves space by relying on the record layer for message lengths.
+(This saves 3 bytes per message compared to TLS, or 9 bytes compared to DTLS.)
+This compact framing is defined by the <code>CTLSHandshake</code> and
+<code>CTLSDatagramHandshake</code> structs.<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.1-2">Any handshake type registered in the IANA TLS HandshakeType Registry can be
+conveyed in a <code>CTLS[Datagram]Handshake</code>, but not all messages are actually
+allowed on a given connection.  This definition shows the messages types
+supported in <code>CTLSHandshake</code> as of TLS 1.3 and DTLS 1.3, but any future
+message types are also permitted.<a href="#section-2.3.1-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.3.1-3">
+<pre>
+      struct {
+          HandshakeType msg_type;    /* handshake type */
+          select (CTLSHandshake.msg_type) {
+              case client_hello:          ClientHello;
+              case server_hello:          ServerHello;
+              case hello_retry_request:   HelloRetryRequest;  /* New */
+              case end_of_early_data:     EndOfEarlyData;
+              case encrypted_extensions:  EncryptedExtensions;
+              case certificate_request:   CertificateRequest;
+              case certificate:           Certificate;
+              case certificate_verify:    CertificateVerify;
+              case finished:              Finished;
+              case new_session_ticket:    NewSessionTicket;
+              case key_update:            KeyUpdate;
+              case request_connection_id: RequestConnectionId;
+              case new_connection_id:     NewConnectionId;
+          };
+      } CTLSHandshake;
+
+      struct {
+          HandshakeType msg_type;    /* handshake type */
+          uint16 message_seq;        /* DTLS-required field */
+          select (CTLSDatagramHandshake.msg_type) {
+            ... /* same as CTLSHandshake */
+          };
+      } CTLSDatagramHandshake;
+</pre><a href="#section-2.3.1-3" class="pilcrow">¶</a>
+</div>
+<p id="section-2.3.1-4">Each <code>CTLSHandshake</code> or <code>CTLSDatagramHandshake</code> MUST be conveyed as a single
+<code>CTLSClientPlaintext.fragment</code>, <code>CTLSServerPlaintext.fragment</code>, or
+<code>CTLSCiphertext.encrypted_record</code>, and is therefore limited to a maximum
+length of <code>2^16-1</code> or less.  When operating over UDP, large
+<code>CTLSDatagramHandshake</code> messages will also require the use of IP
+fragmentation, which is sometimes undesirable.  Operators can avoid these
+concerns by setting <code>template.handshakeFraming = true</code>.<a href="#section-2.3.1-4" class="pilcrow">¶</a></p>
+<p id="section-2.3.1-5">On unreliable transports, the DTLS 1.3 ACK system is used.<a href="#section-2.3.1-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="the-transcript-layer">
+<section id="section-2.3.2">
+          <h4 id="name-the-transcript-layer">
+<a href="#section-2.3.2" class="section-number selfRef">2.3.2. </a><a href="#name-the-transcript-layer" class="section-name selfRef">The Transcript layer</a>
+          </h4>
+<p id="section-2.3.2-1">TLS and DTLS start the handshake with an empty transcript.  cTLS is different:
+it starts the transcript with a "virtual message" whose HandshakeType is
+<code>ctls_template</code> (<a href="#template-handshaketype" class="auto internal xref">Section 6.3</a>) containing the <code>CTLSTemplate</code> used
+for this connection.  This message is included in the transcript even though it
+is not exchanged during connection setup, in order to ensure that both parties
+are using the same template.  Subsequent messages are appended to the transcript
+as usual.<a href="#section-2.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.2-2">When computing the handshake transcript, all handshake messages are represented
+in TLS <code>Handshake</code> messages, as in DTLS 1.3 (<span>[<a href="#RFC9147" class="cite xref">RFC9147</a>], <a href="https://rfc-editor.org/rfc/rfc9147#section-5.2" class="relref">Section 5.2</a></span>),
+regardless of <code>template.handshake_framing</code>.<a href="#section-2.3.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.3.2-3">To ensure that all parties agree about what protocol is in use, and whether
+records are subject to loss, the Cryptographic Label Prefix used for the
+handshake SHALL be "Sctls " (for "Stream cTLS") if <code>Handshake</code> or <code>CTLSHandshake</code>
+transport was used, and "Dctls " (for "Datagram cTLS") otherwise.  (This is
+similar to the prefix substitution in <span><a href="https://rfc-editor.org/rfc/rfc9147#section-5.9" class="relref">Section 5.9</a> of [<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>).<a href="#section-2.3.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="the-logical-layer">
+<section id="section-2.3.3">
+          <h4 id="name-the-logical-layer">
+<a href="#section-2.3.3" class="section-number selfRef">2.3.3. </a><a href="#name-the-logical-layer" class="section-name selfRef">The Logical layer</a>
+          </h4>
+<p id="section-2.3.3-1">The logical handshake layer consists of handshake messages that are reconstructed
+following the instructions in the template.  At this layer, predefined extensions
+are reintroduced, truncated Random values are extended, and all information is
+prepared to enable the cryptographic handshake and any import or export of
+key material and configuration.<a href="#section-2.3.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.3-2">There is no obligation to reconstruct logical handshake messages in any specific
+format, and client and server do not need to agree on the precise representation
+of these messages, so long as they agree on their logical contents.<a href="#section-2.3.3-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="handshake-messages">
+<section id="section-3">
+      <h2 id="name-handshake-messages">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-handshake-messages" class="section-name selfRef">Handshake Messages</a>
+      </h2>
+<p id="section-3-1">In general, we retain the basic structure of each individual
+TLS or DTLS handshake message. However, the following handshake
+messages have been modified for space reduction and cleaned
+up to remove pre-TLS 1.3 baggage.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<div id="clienthello">
+<section id="section-3.1">
+        <h3 id="name-clienthello">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-clienthello" class="section-name selfRef">ClientHello</a>
+        </h3>
+<p id="section-3.1-1">The cTLS ClientHello is defined as follows.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.1-2">
+<pre>
+      opaque Random[RandomLength];      // variable length
+
+      struct {
+          Random random;
+          CipherSuite cipher_suites&lt;1..2^16-1&gt;;
+          Extension extensions&lt;1..2^16-1&gt;;
+      } ClientHello;
+</pre><a href="#section-3.1-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="serverhello">
+<section id="section-3.2">
+        <h3 id="name-serverhello">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-serverhello" class="section-name selfRef">ServerHello</a>
+        </h3>
+<p id="section-3.2-1">We redefine ServerHello in the following way.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.2-2">
+<pre>
+      struct {
+          Random random;
+          CipherSuite cipher_suite;
+          Extension extensions&lt;1..2^16-1&gt;;
+      } ServerHello;
+</pre><a href="#section-3.2-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="helloretryrequest">
+<section id="section-3.3">
+        <h3 id="name-helloretryrequest">
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-helloretryrequest" class="section-name selfRef">HelloRetryRequest</a>
+        </h3>
+<p id="section-3.3-1">In cTLS, the HelloRetryRequest message is a true handshake message
+instead of a specialization of ServerHello.  The HelloRetryRequest has
+the following format.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.3-2">
+<pre>
+      struct {
+          CipherSuite cipher_suite;
+          Extension extensions&lt;2..2^16-1&gt;;
+      } HelloRetryRequest;
+</pre><a href="#section-3.3-2" class="pilcrow">¶</a>
+</div>
+<p id="section-3.3-3">The HelloRetryRequest is the same as the ServerHello above
+but without the unnecessary sentinel Random value.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="section-3.3-4.1">
+            <p id="section-3.3-4.1.1">OPEN ISSUE: Should we define a <code>hello_retry_request_extensions</code> template
+  element?  Or is this too far off the happy path to be worth optimizing?<a href="#section-3.3-4.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+</section>
+</div>
+<div id="examples">
+<section id="section-4">
+      <h2 id="name-examples">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-examples" class="section-name selfRef">Examples</a>
+      </h2>
+<p id="section-4-1">This section provides some example specializations.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-2">For this example we use TLS 1.3 only with AES_GCM,
+x25519, ALPN h2, short random values, and everything
+else is ordinary TLS 1.3.<a href="#section-4-2" class="pilcrow">¶</a></p>
+<div class="lang-JSON sourcecode" id="section-4-3">
+<pre>
+{
+   "ctlsVersion": 0,
+   "profile": "0504030201",
+   "version" : 772,
+   "random": 16,
+   "cipherSuite" : "TLS_AES_128_GCM_SHA256",
+   "dhGroup": {
+     "groupName": "x25519",
+     "keyShareLength": 32
+   },
+   "clientHelloExtensions": {
+      "predefinedExtensions": {
+          "application_layer_protocol_negotiation" : "030016832",
+      },
+      "allowAdditional": true
+    }
+}
+</pre><a href="#section-4-3" class="pilcrow">¶</a>
+</div>
+<p id="section-4-4">Version 772 corresponds to the hex representation 0x0304 (i.e. 1.3).<a href="#section-4-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-5">
+      <h2 id="name-security-considerations">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-5-1">The use of key ids is a new feature introduced in this document, which
+requires some analysis, especially as it looks like a potential source
+of identity misbinding. This is, however, entirely separable
+from the rest of the specification.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">Once the handshake has completed, this specification is intended to
+provide a fully secured connection even if the client initially learned the
+template through an untrusted channel.  However, this security relies on
+the use of a cryptographically strong Finished message.  If the Finished
+message has not yet been received, or the transcript hash has been
+truncated by use of a small <code>finished_size</code> template element value, an
+attacker could be using a forged template to impersonate the other party.
+This should not impact any ordinary use of TLS, including Early Data (which
+is secured by the previously completed handshake).<a href="#section-5-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="iana-considerations">
+<section id="section-6">
+      <h2 id="name-iana-considerations">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<div id="adding-a-contenttype">
+<section id="section-6.1">
+        <h3 id="name-adding-a-contenttype">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-adding-a-contenttype" class="section-name selfRef">Adding a ContentType</a>
+        </h3>
+<p id="section-6.1-1">This document requests that a code point be allocated from the "TLS ContentType
+registry.  This value must be in the range 0-31 (inclusive).  The row to be
+added in the registry has the following form:<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<table class="center" id="table-1">
+          <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Value</th>
+              <th class="text-left" rowspan="1" colspan="1">Description</th>
+              <th class="text-left" rowspan="1" colspan="1">DTLS-OK</th>
+              <th class="text-left" rowspan="1" colspan="1">Reference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">TBD</td>
+              <td class="text-left" rowspan="1" colspan="1">ctls</td>
+              <td class="text-left" rowspan="1" colspan="1">Y</td>
+              <td class="text-left" rowspan="1" colspan="1">RFCXXXX</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">TBD</td>
+              <td class="text-left" rowspan="1" colspan="1">ctls_handshake</td>
+              <td class="text-left" rowspan="1" colspan="1">Y</td>
+              <td class="text-left" rowspan="1" colspan="1">RFCXXXX</td>
+            </tr>
+          </tbody>
+        </table>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="section-6.1-3.1">
+            <p id="section-6.1-3.1.1">RFC EDITOR: Please replace the value TBD with the value assigned by IANA, and
+the value XXXX to the RFC number assigned for this document.<a href="#section-6.1-3.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="template-keys">
+<section id="section-6.2">
+        <h3 id="name-template-keys">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-template-keys" class="section-name selfRef">Template Keys</a>
+        </h3>
+<p id="section-6.2-1">This document requests that IANA open a new registry entitled "cTLS Template Keys", on the Transport Layer Security (TLS) Parameters page, with a "Specification Required" registration policy and the following initial contents:<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<table class="center" id="table-2">
+          <caption><a href="#table-2" class="selfRef">Table 2</a></caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Name</th>
+              <th class="text-left" rowspan="1" colspan="1">Value</th>
+              <th class="text-left" rowspan="1" colspan="1">Reference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">profile</td>
+              <td class="text-left" rowspan="1" colspan="1">0</td>
+              <td class="text-left" rowspan="1" colspan="1">(This document)</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">version</td>
+              <td class="text-left" rowspan="1" colspan="1">1</td>
+              <td class="text-left" rowspan="1" colspan="1">(This document)</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">cipher_suite</td>
+              <td class="text-left" rowspan="1" colspan="1">2</td>
+              <td class="text-left" rowspan="1" colspan="1">(This document)</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">dh_group</td>
+              <td class="text-left" rowspan="1" colspan="1">3</td>
+              <td class="text-left" rowspan="1" colspan="1">(This document)</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">signature_algorithm</td>
+              <td class="text-left" rowspan="1" colspan="1">4</td>
+              <td class="text-left" rowspan="1" colspan="1">(This document)</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">random</td>
+              <td class="text-left" rowspan="1" colspan="1">5</td>
+              <td class="text-left" rowspan="1" colspan="1">(This document)</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">mutual_auth</td>
+              <td class="text-left" rowspan="1" colspan="1">6</td>
+              <td class="text-left" rowspan="1" colspan="1">(This document)</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">handshake_framing</td>
+              <td class="text-left" rowspan="1" colspan="1">7</td>
+              <td class="text-left" rowspan="1" colspan="1">(This document)</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">client_hello_extensions</td>
+              <td class="text-left" rowspan="1" colspan="1">8</td>
+              <td class="text-left" rowspan="1" colspan="1">(This document)</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">server_hello_extensions</td>
+              <td class="text-left" rowspan="1" colspan="1">9</td>
+              <td class="text-left" rowspan="1" colspan="1">(This document)</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">encrypted_extensions</td>
+              <td class="text-left" rowspan="1" colspan="1">10</td>
+              <td class="text-left" rowspan="1" colspan="1">(This document)</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">certificate_request_extensions</td>
+              <td class="text-left" rowspan="1" colspan="1">11</td>
+              <td class="text-left" rowspan="1" colspan="1">(This document)</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">known_certificates</td>
+              <td class="text-left" rowspan="1" colspan="1">12</td>
+              <td class="text-left" rowspan="1" colspan="1">(This document)</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">finished_size</td>
+              <td class="text-left" rowspan="1" colspan="1">13</td>
+              <td class="text-left" rowspan="1" colspan="1">(This document)</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">optional</td>
+              <td class="text-left" rowspan="1" colspan="1">65535</td>
+              <td class="text-left" rowspan="1" colspan="1">(This document)</td>
+            </tr>
+          </tbody>
+        </table>
+</section>
+</div>
+<div id="template-handshaketype">
+<section id="section-6.3">
+        <h3 id="name-adding-a-ctls-template-mess">
+<a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-adding-a-ctls-template-mess" class="section-name selfRef">Adding a cTLS Template message type</a>
+        </h3>
+<p id="section-6.3-1">IANA is requested to add the following entry to the TLS HandshakeType registry.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.3-2.1">
+            <p id="section-6.3-2.1.1">Value: TBD<a href="#section-6.3-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.3-2.2">
+            <p id="section-6.3-2.2.1">Description: ctls_template<a href="#section-6.3-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.3-2.3">
+            <p id="section-6.3-2.3.1">DTLS-OK: Y<a href="#section-6.3-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.3-2.4">
+            <p id="section-6.3-2.4.1">Reference: (This document)<a href="#section-6.3-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.3-2.5">
+            <p id="section-6.3-2.5.1">Comment: Virtual message used in cTLS.<a href="#section-6.3-2.5.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="activating-the-helloretryrequest-messagetype">
+<section id="section-6.4">
+        <h3 id="name-activating-the-helloretryre">
+<a href="#section-6.4" class="section-number selfRef">6.4. </a><a href="#name-activating-the-helloretryre" class="section-name selfRef">Activating the HelloRetryRequest MessageType</a>
+        </h3>
+<p id="section-6.4-1">This document requests that IANA change the name of entry 6 in the TLS
+HandshakeType Registry from "hello_retry_request_RESERVED" to
+"hello_retry_request", and set its Reference field to this document.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="reserved-profiles">
+<section id="section-6.5">
+        <h3 id="name-reserved-profiles">
+<a href="#section-6.5" class="section-number selfRef">6.5. </a><a href="#name-reserved-profiles" class="section-name selfRef">Reserved profiles</a>
+        </h3>
+<p id="section-6.5-1">This document requests that IANA open a new registry entitled "Well-known
+cTLS Profile IDs", on the Transport Layer Security (TLS) Parameters page,
+with the following columns:<a href="#section-6.5-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.5-2.1">
+            <p id="section-6.5-2.1.1">ID value: A sequence of 1-4 octets.<a href="#section-6.5-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.5-2.2">
+            <p id="section-6.5-2.2.1">Template: A JSON object.<a href="#section-6.5-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.5-2.3">
+            <p id="section-6.5-2.3.1">Note: An explanation or reference.<a href="#section-6.5-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-6.5-3">The ID values of length 1 are subject to a "Standards Action" registry
+policy. Values of length 2 are subject to an "RFC Required" policy. Values
+of length 3 and 4 are subject to a "First Come First Served" policy. Values
+longer than 4 octets are not subject to registration and MUST NOT appear
+in this registry.<a href="#section-6.5-3" class="pilcrow">¶</a></p>
+<p id="section-6.5-4">The initial registry contents are:<a href="#section-6.5-4" class="pilcrow">¶</a></p>
+<table class="center" id="table-3">
+          <caption><a href="#table-3" class="selfRef">Table 3</a></caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">ID value</th>
+              <th class="text-left" rowspan="1" colspan="1">Template</th>
+              <th class="text-left" rowspan="1" colspan="1">Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>[0x00]</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>{"version": 772}</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">cTLS 1.3-only</td>
+            </tr>
+          </tbody>
+        </table>
+</section>
+</div>
+</section>
+</div>
+<section id="section-7">
+      <h2 id="name-references">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-references" class="section-name selfRef">References</a>
+      </h2>
+<div id="sec-normative-references">
+<section id="section-7.1">
+        <h3 id="name-normative-references">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
+<dl class="references">
+<dt id="RFC2119">[RFC2119]</dt>
+        <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+        <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8446">[RFC8446]</dt>
+        <dd>
+<span class="refAuthor">Rescorla, E.</span>, <span class="refTitle">"The Transport Layer Security (TLS) Protocol Version 1.3"</span>, <span class="seriesInfo">RFC 8446</span>, <span class="seriesInfo">DOI 10.17487/RFC8446</span>, <time datetime="2018-08" class="refDate">August 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8446">https://www.rfc-editor.org/rfc/rfc8446</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9147">[RFC9147]</dt>
+      <dd>
+<span class="refAuthor">Rescorla, E.</span>, <span class="refAuthor">Tschofenig, H.</span>, and <span class="refAuthor">N. Modadugu</span>, <span class="refTitle">"The Datagram Transport Layer Security (DTLS) Protocol Version 1.3"</span>, <span class="seriesInfo">RFC 9147</span>, <span class="seriesInfo">DOI 10.17487/RFC9147</span>, <time datetime="2022-04" class="refDate">April 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9147">https://www.rfc-editor.org/rfc/rfc9147</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="sec-informative-references">
+<section id="section-7.2">
+        <h3 id="name-informative-references">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="Comparse">[Comparse]</dt>
+      <dd>
+<span class="refAuthor">Wallez, T.</span>, <span class="refAuthor">Protzenko, J.</span>, and <span class="refAuthor">K. Bhargavan</span>, <span class="refTitle">"Comparse: Provably Secure Formats for Cryptographic Protocols"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://eprint.iacr.org/2023/1390">https://eprint.iacr.org/2023/1390</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</div>
+</section>
+<div id="transcripts">
+<section id="appendix-A">
+      <h2 id="name-example-exchange">
+<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-example-exchange" class="section-name selfRef">Example Exchange</a>
+      </h2>
+<p id="appendix-A-1">The follow exchange illustrates a complete cTLS-based exchange supporting
+mutual authentication using certificates. The digital signatures use Ed25519.
+The ephemeral Diffie-Hellman uses the X25519 curve and
+the exchange negotiates TLS-AES-128-CCM8-SHA256.
+The certificates are exchanged using certificate identifiers.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-2">The resulting byte counts are as follows:<a href="#appendix-A-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-A-3">
+<pre>
+                     ECDHE
+              ------------------
+              TLS  CTLS  Cryptovariables
+              ---  ----  ---------------
+ClientHello   132   74       64
+ServerHello    90   68       64
+ServerFlight  478   92       72
+ClientFlight  458   91       72
+========================================
+Total        1158  325      272
+</pre><a href="#appendix-A-3" class="pilcrow">¶</a>
+</div>
+<p id="appendix-A-4">The following compression profile was used in this example:<a href="#appendix-A-4" class="pilcrow">¶</a></p>
+<div class="lang-JSON sourcecode" id="appendix-A-5">
+<pre>
+{
+  "ctlsVersion": 0,
+  "profile": "abcdef1234",
+  "version": 772,
+  "cipherSuite": "TLS_AES_128_CCM_8_SHA256",
+  "dhGroup": {
+    "groupName": "x25519",
+    "keyShareLength": 32
+  },
+  "signatureAlgorithm": {
+    "signatureScheme": "ed25519",
+    "signatureLength": 64
+  },
+  "finishedSize": 8,
+  "clientHelloExtensions": {
+    "predefinedExtensions": {
+      "server_name": "000e00000b6578616d706c652e636f6d"
+    },
+    "expectedExtensions": ["key_share"],
+    "allowAdditional": false
+  },
+  "serverHelloExtensions": {
+    "expectedExtensions": ["key_share"],
+    "allowAdditional": false
+  },
+  "encryptedExtensions": {
+    "allowAdditional": false
+  },
+  "mutualAuth": true,
+  "knownCertificates": {
+    "61": "3082...",
+    "62": "3082...",
+    "63": "...",
+    "64": "...",
+    ...
+  }
+}
+</pre><a href="#appendix-A-5" class="pilcrow">¶</a>
+</div>
+<p id="appendix-A-6">ClientHello: 74 bytes = Profile ID(5) + Random(32) + DH(32) + Overhead(5)<a href="#appendix-A-6" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-A-7">
+<pre>
+$TBD               // CTLSClientPlaintext.message_type = ctls_handshake
+05 abcdef1234      // CTLSClientPlaintext.profile_id
+0041               // CTLSClientPlaintext.fragment length = 65
+  01               // CTLSHandshake.msg_type = client_hello
+    5856...c130    //   ClientHello.random (32 bytes)
+// ClientHello.extensions is omitted except for the key share contents.
+      a690...f948  //     KeyShareEntry.key_exchange (32 bytes)
+</pre><a href="#appendix-A-7" class="pilcrow">¶</a>
+</div>
+<p id="appendix-A-8">ServerHello: 68 bytes = Random(32) + DH(32) + Overhead(4)<a href="#appendix-A-8" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-A-9">
+<pre>
+$TBD               // CTLSServerPlaintext.message_type = ctls_handshake
+0041               // CTLSServerPlaintext.fragment length
+  02               //   CTLSHandshake.msg_type = server_hello
+    cff4...9ca8    //     ServerHello.random (32 bytes)
+// ServerHello.extensions is omitted except for the key share contents.
+      9fbc...0f49  //       KeyShareEntry.key_exchange (32 bytes)
+</pre><a href="#appendix-A-9" class="pilcrow">¶</a>
+</div>
+<p id="appendix-A-10">Server Flight: 92 =
+    SIG(64) + Finished(8) + MAC(8) + CERTID(1) + Overhead(11)<a href="#appendix-A-10" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-A-11">
+<pre>
+24                 // CTLSCipherText header, L=1, C,S,E=0
+0059               // CTLSCipherText.length = 89
+
+// BEGIN ENCRYPTED CONTENT
+
+08                 // CTLSHandshake.msg_type = encrypted_extensions
+
+// The EncryptedExtensions body is omitted because there are no more
+// extensions.  The length is also omitted, because allowAdditional is
+// false.
+
+// The CertificateRequest message is omitted because "mutualAuth" and
+// "signatureAlgorithm" are specified in the template.
+
+0b                 // CTLSHandshake.msg_type = certificate
+  00               //   Certificate.certificate_request_context = ""
+  03               //   Certificate.certificate_list length
+    01             //     CertificateEntry.cert_data length
+      61           //       cert_data = 'a'
+    00             //     CertificateEntry.extensions
+
+0f                 // CTLShandshake.msg_type = certificate_verify
+  3045...10ce      //   CertificateVerify.signature
+
+14                 // CTLSHandshake.msg_type = finished
+  bfc9d66715bb2b04 //   Finished.verify_data
+
+// END ENCRYPTED CONTENT
+
+b3d9...0aa7        // CCM-8 MAC (8 bytes)
+</pre><a href="#appendix-A-11" class="pilcrow">¶</a>
+</div>
+<p id="appendix-A-12">Client Flight: 91 bytes =
+    SIG(64) + Finished(8) + MAC(8) + CERTID(1) + Overhead(10)<a href="#appendix-A-12" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-A-13">
+<pre>
+24                 // CTLSCipherText header, L=1, C,S,E=0
+0058               // CTLSCipherText.length = 88
+
+// BEGIN ENCRYPTED CONTENT
+
+0b                 // CTLSHandshake.msg_type = certificate
+  00               //   Certificate.certificate_request_context = ""
+  03               //   Certificate.certificate_list length
+    01             //     CertificateEntry.cert_data length
+      62           //       cert_data = 'b'
+    00             //     CertificateEntry.extensions
+
+0f                 // CTLSHandshake.msg_type = certificate_verify
+                   //   CertificateVerify.algorithm is omitted
+                   //   CertificateVerify.signature length is omitted
+  3045...f60e      //   CertificateVerify.signature (64 bytes)
+
+14                 // CTLSHandshake.msg_type = finished
+  35e9c34eec2c5dc1 //   Finished.verify_data
+
+// END ENCRYPTED CONTENT
+
+09c5..37b1         // CCM-8 MAC (8 bytes)
+</pre><a href="#appendix-A-13" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="acknowledgments">
+<section id="appendix-B">
+      <h2 id="name-acknowledgments">
+<a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+      </h2>
+<p id="appendix-B-1">We would like to thank Karthikeyan Bhargavan, Owen Friel, Sean Turner, Martin Thomson, Chris Wood, Theophile Wallez, and John Preuß Mattsson.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-C">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Eric Rescorla</span></div>
+<div dir="auto" class="left"><span class="org">Windy Hill Systems, LLC</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:ekr@rtfm.com" class="email">ekr@rtfm.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Richard Barnes</span></div>
+<div dir="auto" class="left"><span class="org">Cisco</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:rlb@ipv.sx" class="email">rlb@ipv.sx</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Hannes Tschofenig</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:hannes.tschofenig@gmx.net" class="email">hannes.tschofenig@gmx.net</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Benjamin M. Schwartz</span></div>
+<div dir="auto" class="left"><span class="org">Meta Platforms, Inc.</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:ietf@bemasc.net" class="email">ietf@bemasc.net</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>

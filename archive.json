@@ -1,0 +1,4077 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2022-07-26T02:06:09.499722+00:00",
+  "repo": "tlswg/draft-ietf-tls-ctls",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 35,
+      "id": "MDU6SXNzdWU5NTUxNjA1Nzk=",
+      "title": "Remove varint encoding",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/issues/35",
+      "state": "CLOSED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "As discussed in IETF 111.",
+      "createdAt": "2021-07-28T19:15:12Z",
+      "updatedAt": "2022-02-25T19:57:57Z",
+      "closedAt": "2022-02-25T19:57:57Z",
+      "comments": [
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "It looks like there's still a lingering varint in -04:\r\n\r\n>              opaque fragment<0..V>;",
+          "createdAt": "2021-10-25T19:38:14Z",
+          "updatedAt": "2021-10-25T19:38:14Z"
+        }
+      ]
+    },
+    {
+      "number": 38,
+      "id": "I_kwDOClypJM49uIeQ",
+      "title": "suppressSequenceNumber is not defined",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/issues/38",
+      "state": "CLOSED",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Looks like it was lost in -03.",
+      "createdAt": "2021-10-25T19:41:54Z",
+      "updatedAt": "2022-03-07T20:05:08Z",
+      "closedAt": "2022-03-07T20:05:08Z",
+      "comments": [
+        {
+          "author": "hannestschofenig",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Added this in https://github.com/tlswg/draft-ietf-tls-ctls/pull/49",
+          "createdAt": "2022-03-01T11:55:10Z",
+          "updatedAt": "2022-03-01T11:55:10Z"
+        }
+      ]
+    },
+    {
+      "number": 39,
+      "id": "I_kwDOClypJM5ED0gg",
+      "title": "Request: Clarify extensibility rules",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/issues/39",
+      "state": "CLOSED",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "cTLS enumerates keys in the template, but does not explain how templates can be extended.\r\n\r\nSuggestion: Clients must reject the whole template if it contains any key they do not understand.  The \u201coptional\u201d key holds a map of optional extensions that are safe to ignore.",
+      "createdAt": "2022-02-17T20:43:59Z",
+      "updatedAt": "2022-03-07T20:04:46Z",
+      "closedAt": "2022-03-07T20:04:46Z",
+      "comments": [
+        {
+          "author": "hannestschofenig",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thanks for addressing your own issue with a PR. Creating an IANA registry for the keys used in the configuration data makes sense. \r\n\r\nI would, however, like to point out (and maybe we need to make this explicit) that the configuration information is defined for convenience but is not a mandatory-to-implement functionality for a stack. ",
+          "createdAt": "2022-03-01T10:41:48Z",
+          "updatedAt": "2022-03-01T10:41:48Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Sure, some use cases can pre-arrange, or even hardcode, a specific configuration through a nonstandard channel.  Some use cases (where the client and server are developed separately) obviously cannot.",
+          "createdAt": "2022-03-01T16:13:25Z",
+          "updatedAt": "2022-03-01T16:13:25Z"
+        }
+      ]
+    },
+    {
+      "number": 40,
+      "id": "I_kwDOClypJM5ED0q-",
+      "title": "Request: Discuss encoding of Alerts",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/issues/40",
+      "state": "CLOSED",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "It\u2019s currently not clear how plaintext Alerts are represented.\r\n\r\nSuggestion: content_type = ctls_alert",
+      "createdAt": "2022-02-17T20:44:35Z",
+      "updatedAt": "2022-03-07T20:05:08Z",
+      "closedAt": "2022-03-07T20:05:08Z",
+      "comments": [
+        {
+          "author": "hannestschofenig",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I created a PR to address this issue: https://github.com/tlswg/draft-ietf-tls-ctls/pull/47",
+          "createdAt": "2022-03-01T11:32:24Z",
+          "updatedAt": "2022-03-01T11:32:24Z"
+        },
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@bemasc why can't they just be the usual content type? What am I missing.",
+          "createdAt": "2022-03-07T16:27:50Z",
+          "updatedAt": "2022-03-07T16:27:50Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The current text says\r\n> The only cTLS records that are sent in plaintext are handshake\r\n   records (ClientHello and ServerHello/HRR).  The content type is\r\n   therefore constant (it is always handshake), so we instead set the\r\n   content_type field to a fixed cTLS-specific value to distinguish cTLS\r\n   plaintext records from encrypted records, TLS/DTLS records, and other\r\n   protocols using the same 5-tuple.\r\n\r\nI'm proposing that:\r\n1. The first sentence (or maybe the second) is not right.\r\n2. We need another `content_type` for plaintext alerts.\r\n\r\nI'm not sure what you mean by \"the usual content type\".  cTLS currently does not use TLS's ContentType registry.  Instead, the current draft defines a new `ctls_handshake` value to identify these records.\r\n\r\nIf you're proposing to switch cTLS to use the TLS ContentTypes instead ... that seems fine to me.  However, the divergence does seem to be deliberate, as explained in the text.",
+          "createdAt": "2022-03-07T16:59:15Z",
+          "updatedAt": "2022-03-07T16:59:15Z"
+        },
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think this is just an error on my part:\r\n\r\n1. You obviously need to be able to send plaintext alerts.\r\n2. The requirement is to be able to demux, but if cTLS alerts are the same, then no need\r\n\r\nFor that reason, I propose to just use TLS's alert type.\r\n\r\n\r\n",
+          "createdAt": "2022-03-07T17:03:22Z",
+          "updatedAt": "2022-03-07T17:03:22Z"
+        }
+      ]
+    },
+    {
+      "number": 41,
+      "id": "I_kwDOClypJM5ED0wk",
+      "title": "Discuss fragmentation of handshake messages in cTLS/UDP",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/issues/41",
+      "state": "CLOSED",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "bemasc"
+      ],
+      "labels": [],
+      "body": "The current text doesn\u2019t mention this, although it seems relatively clear how it\u2019s expected to work (using the DTLS Handshake struct).",
+      "createdAt": "2022-02-17T20:44:54Z",
+      "updatedAt": "2022-07-07T22:58:02Z",
+      "closedAt": "2022-07-07T22:58:02Z",
+      "comments": []
+    },
+    {
+      "number": 42,
+      "id": "I_kwDOClypJM5ED1r_",
+      "title": "Request: Make fragmented handshake messages self-delimiting in cTLS/TCP",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/issues/42",
+      "state": "CLOSED",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "bemasc"
+      ],
+      "labels": [],
+      "body": "This would allow recipients to detect the end of a handshake message from the CTLSPlaintext header alone, allowing the recipient to reconstruct the entire handshake message before parsing it.  Currently, a streaming parser is required in order to detect the end.\r\n\r\nSuggested implementation: Senders set content_type = ctls_handshake_end for a message\u2019s final fragment.",
+      "createdAt": "2022-02-17T20:47:46Z",
+      "updatedAt": "2022-07-08T00:16:25Z",
+      "closedAt": "2022-07-08T00:16:25Z",
+      "comments": [
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I can see why you want that, but it's not generally a TLS property, and I'm reluctant to change things.",
+          "createdAt": "2022-03-07T16:56:43Z",
+          "updatedAt": "2022-03-07T16:56:43Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "AFAIK, TLS does not require a streaming ClientHello parser.  The recipient can read `Handshake.length` (uint24) and then buffer the remainder before parsing.\r\n\r\ncTLS, as currently specified, does not have `Handshake.length`.  This means that the recipient has to cross all the way down into the extension parsing code before it finds out that the ClientHello is still incomplete.  Given the complex template-driven handshake parsing code, I think making a streaming parser required is ill-advised.\r\n\r\nGiven the desire for compactness, I think a flag of some kind on the final handshake message record seems like a reasonable solution, replacing the uint24 length.  It would also simplify Pseudorandom cTLS.  However, if that's not appealing, you could simply reintroduce `Handshake.length`.",
+          "createdAt": "2022-03-07T17:31:09Z",
+          "updatedAt": "2022-03-07T17:31:09Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@ekr proposed a solution on slide 5 [here](https://datatracker.ietf.org/meeting/113/materials/slides-113-tls-ctls-00.pdf):\r\n\r\n~~~\r\nhandshakeFraming (none | length | full)\r\n~~~\r\n\r\nI'm fine with that, so long as it doesn't end up requiring recipients to do something heroic to reconstruct the ClientHello.  Thus, \"framing = none\" should imply that messages cannot be fragmented at all (max size limited to 2^14-1).\r\n\r\nI'm not sure I see the utility of the explicit distinction between \"length\" and \"full\".  Surely \"length\" is not usable with DTLS due to reordering, and \"full\" is redundant in TLS/TCP.  Perhaps we only need a single bit to enable/disable framing, and length-vs-full can be implicit from the transport.",
+          "createdAt": "2022-04-12T15:28:08Z",
+          "updatedAt": "2022-04-18T15:23:18Z"
+        },
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I could live with this. Objections?",
+          "createdAt": "2022-06-03T23:13:23Z",
+          "updatedAt": "2022-06-03T23:13:23Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Solved by #59",
+          "createdAt": "2022-07-08T00:16:25Z",
+          "updatedAt": "2022-07-08T00:16:25Z"
+        }
+      ]
+    },
+    {
+      "number": 43,
+      "id": "I_kwDOClypJM5EED5w",
+      "title": "Request: Make CTLSPlaintext and CTLSCiphertext sizes less variable",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/issues/43",
+      "state": "CLOSED",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "For cTLS/TCP, the CTLSCiphertext headers could easily all be the same size (1 byte type/flags, 2 byte length).  For cTLS/UDP, the header sizes could be made more predictable.\r\n\r\nSuggestions:\r\n* Always suppress sequence numbers and disallow connection IDs in cTLS/TCP, and after the first record in a datagram in cTLS/UDP.\r\n* Move `profile_id` into the cTLS ClientHello struct.",
+      "createdAt": "2022-02-17T21:35:17Z",
+      "updatedAt": "2022-03-22T10:34:07Z",
+      "closedAt": "2022-03-22T10:34:07Z",
+      "comments": [
+        {
+          "author": "hannestschofenig",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Moving the profile_id into the ClientHello sounds good to me. Here is the PR: https://github.com/tlswg/draft-ietf-tls-ctls/pull/48\r\n",
+          "createdAt": "2022-03-01T11:48:16Z",
+          "updatedAt": "2022-03-01T11:48:16Z"
+        },
+        {
+          "author": "hannestschofenig",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Suppressing sequence numbers in cTLS/TCP sounds good to me as well. Here is the PR: https://github.com/tlswg/draft-ietf-tls-ctls/pull/49\r\n",
+          "createdAt": "2022-03-01T11:53:36Z",
+          "updatedAt": "2022-03-01T11:53:36Z"
+        },
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@bemasc closing as I think we addressed.",
+          "createdAt": "2022-03-22T10:34:07Z",
+          "updatedAt": "2022-03-22T10:34:07Z"
+        }
+      ]
+    },
+    {
+      "number": 54,
+      "id": "I_kwDOClypJM5FQomW",
+      "title": "What is `profile_id`?",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/issues/54",
+      "state": "CLOSED",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [
+        "help wanted"
+      ],
+      "body": "The template says it's an integer (in what range?), but the ClientHello says it's 0-255 bytes.\r\n\r\nI think it's probably easiest to say it's a string of 0-255 bytes, with the empty string reserved to mean \"no template\".  I guess if you want to get fancy you could reserve all 1-4 byte strings.",
+      "createdAt": "2022-03-07T22:21:11Z",
+      "updatedAt": "2022-07-01T03:17:21Z",
+      "closedAt": "2022-07-01T03:17:21Z",
+      "comments": [
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Agreed. If you want to send a PR, I wouldn't object.",
+          "createdAt": "2022-03-22T12:26:31Z",
+          "updatedAt": "2022-03-22T12:26:31Z"
+        }
+      ]
+    },
+    {
+      "number": 56,
+      "id": "I_kwDOClypJM5G77KK",
+      "title": "Discuss handling of untrusted profiles",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/issues/56",
+      "state": "OPEN",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Is it a design goal of this draft to support secure connection, even if the compression template is distributed over an untrusted channel?\r\n\r\nI believe it is a design goal, and I think it's probably achieved by the current draft (except for questions around the `random` and `finishedSize` keys), but it's not stated explicitly in the draft.",
+      "createdAt": "2022-04-01T18:00:44Z",
+      "updatedAt": "2022-04-01T18:00:44Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 57,
+      "id": "I_kwDOClypJM5G8De3",
+      "title": "Figure out which transcript is authenticated",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/issues/57",
+      "state": "CLOSED",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "There was some discussion in the TLS session at IETF 113 about whether the Finished message should authenticate the reconstructed TLS transcript (as currently) or the cTLS transcript.  We should try to reach a conclusion about this.\r\n\r\nNote that, if it is allowed to receive compression templates over an untrusted channel (#56), authenticating the cTLS transcript would presumably require including the compression template in the transcript, to avoid cross-template attacks (e.g. injecting the attacker's `key_share` without altering the transcript).  To avoid hashing JSON (which might be reformatted by intermediary systems), this would probably require defining a compact binary encoding of the JSON template (which I would like to have!).",
+      "createdAt": "2022-04-01T18:37:52Z",
+      "updatedAt": "2022-07-08T16:20:45Z",
+      "closedAt": "2022-07-08T16:20:45Z",
+      "comments": [
+        {
+          "author": "richsalz",
+          "authorAssociation": "NONE",
+          "body": "\"compact binary encoding\" brings to mind CBOR.  I think having a canonical/compat JSON format is beyond the scope of this doc.",
+          "createdAt": "2022-04-01T18:52:10Z",
+          "updatedAt": "2022-04-01T18:52:10Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "CBOR is a possibility, but defining a compact, canonical CBOR representation might also be nontrivial.  Personally, I would reuse the TLS extensions field format, with numeric key IDs and binary formats defined for each cTLS template element.",
+          "createdAt": "2022-04-01T18:57:24Z",
+          "updatedAt": "2022-04-01T18:57:24Z"
+        },
+        {
+          "author": "richsalz",
+          "authorAssociation": "NONE",
+          "body": "Perhaps reading RFC 8949 will change your mind.\r\n",
+          "createdAt": "2022-04-01T19:16:47Z",
+          "updatedAt": "2022-04-01T19:16:47Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "My main concern about a generic JSON->CBOR conversion is that it is still an inefficient encoding, and I would like to be able to distribute cTLS profiles efficiently.  A generic CBOR encoding would still have keys represented as strings, binary values represented in hexadecimal, etc.\r\n\r\nEven apart from efficiency, I still have concerns regarding canonicalization.  For example, some JSON-handling intermediaries are likely to alter the order of keys in maps, convert integer-valued floats to integers, etc.",
+          "createdAt": "2022-04-01T19:45:27Z",
+          "updatedAt": "2022-04-01T19:45:27Z"
+        },
+        {
+          "author": "richsalz",
+          "authorAssociation": "NONE",
+          "body": "I was suggesting cbor as the inter-machine transport. As for keys-as-string, well, you *are* using json and therefore don't have alternatives.\r\n\r\nMaybe use the TLS presentation language.  It's already part of TLS stacks, is pretty compact, and canonical.",
+          "createdAt": "2022-04-01T19:48:52Z",
+          "updatedAt": "2022-04-01T19:48:52Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I have the impression that the preference is to move to a non-reconstruction handshake.  I've written up a (draft) PR that implements that: #60.  Unsurprisingly, this is a massive change to the document.\r\n\r\n#60 includes the changes from the other two outstanding PRs, so they should be merged first.",
+          "createdAt": "2022-06-28T02:22:18Z",
+          "updatedAt": "2022-06-28T02:22:28Z"
+        }
+      ]
+    },
+    {
+      "number": 71,
+      "id": "I_kwDOClypJM5Nytrm",
+      "title": "Decide what to do with the `epoch` field on streaming transports",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/issues/71",
+      "state": "OPEN",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Standard TLS doesn't need `epoch`, but the Stream cTLS header has a space for it anyway.  What should we put there?\r\n\r\nPutting the DTLS-style epoch bits there might be good for consistency, but it doesn't have any functional purpose, and might reveal some information about the handshake state to an onlooker.",
+      "createdAt": "2022-07-14T18:19:21Z",
+      "updatedAt": "2022-07-14T18:19:21Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 72,
+      "id": "I_kwDOClypJM5OKmID",
+      "title": "IANA particulars",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/issues/72",
+      "state": "OPEN",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "From an early IANA review:\r\n\r\n> First, if the Specification Required procedure mentioned in Section 6.2 is meant to include the mailing list review described in RFC 8447, could you include some text that refers to it? draft-ietf-tls-external-psk-importer used \"The procedures for requesting values in the Specification Required space are specified in Section 17 of [RFC8447].\"\r\n\r\n> Actually, given that the mailing list is used throughout the TLS registries, if it isn't being used here, it might be helpful to note that as well.\r\n\r\n> Second, in Section 6.5, should the \u201ctemplate\u201d field contain a link to a .json file, or should it contain the text itself?",
+      "createdAt": "2022-07-20T15:55:37Z",
+      "updatedAt": "2022-07-20T15:55:37Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 73,
+      "id": "I_kwDOClypJM5OhQMu",
+      "title": "Omitting empty messages seems unlikely to be safe",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/issues/73",
+      "state": "OPEN",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "@martinthomson points out that EndOfEarlyData is an empty message that is semantically meaningful and cannot be predicted by the recipient.",
+      "createdAt": "2022-07-25T20:36:24Z",
+      "updatedAt": "2022-07-25T20:36:24Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 74,
+      "id": "I_kwDOClypJM5OhxlK",
+      "title": "Remove discussion of compressed elliptic curve representations",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/issues/74",
+      "state": "OPEN",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "It seems that we have consensus to move compressed representations into new IANA codepoints, rather than try to reuse the existing codepoints with a template-driven encoding.  That would make the question of compressed representations orthogonal to cTLS, so this topic can be removed from the draft.",
+      "createdAt": "2022-07-25T23:02:25Z",
+      "updatedAt": "2022-07-25T23:02:25Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "MDExOlB1bGxSZXF1ZXN0Mjk1NTA2MzQ3",
+      "title": "Compression",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/1",
+      "state": "MERGED",
+      "author": "ekr",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2019-07-08T21:37:38Z",
+      "updatedAt": "2019-07-08T23:02:40Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "c8f54666a9e4a23a342a4821291de5ebcf7d5398",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "compression",
+      "headRefOid": "3846b034bef26b3e481e0bcbc71c93085c0af002",
+      "closedAt": "2019-07-08T23:02:40Z",
+      "mergedAt": "2019-07-08T23:02:40Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "a7e9f4906de2015a0f0c7c7fbe27538ec0a10999"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MjU5MTg2NTc3",
+          "commit": {
+            "abbreviatedOid": "00ff6d4"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2019-07-08T22:22:49Z",
+          "updatedAt": "2019-07-08T22:51:49Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "Nit: DDISCLAIMER",
+              "createdAt": "2019-07-08T22:22:50Z",
+              "updatedAt": "2019-07-08T22:55:49Z"
+            },
+            {
+              "originalPosition": 42,
+              "body": "This ends prematurely.",
+              "createdAt": "2019-07-08T22:23:28Z",
+              "updatedAt": "2019-07-08T22:55:49Z"
+            },
+            {
+              "originalPosition": 109,
+              "body": "Nit: Extra blank line",
+              "createdAt": "2019-07-08T22:26:19Z",
+              "updatedAt": "2019-07-08T22:55:49Z"
+            },
+            {
+              "originalPosition": 101,
+              "body": "XXX = 48 / 164 / 116 for M1 / M2 / M3, with:\r\n* Mutual auth\r\n* 16 byte random\r\n* Finished included",
+              "createdAt": "2019-07-08T22:51:41Z",
+              "updatedAt": "2019-07-08T22:55:49Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MjU5MTk1NjIw",
+          "commit": {
+            "abbreviatedOid": "00ff6d4"
+          },
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2019-07-08T22:53:19Z",
+          "updatedAt": "2019-07-08T22:53:19Z",
+          "comments": [
+            {
+              "originalPosition": 109,
+              "body": "Appreciate the value you add here.",
+              "createdAt": "2019-07-08T22:53:19Z",
+              "updatedAt": "2019-07-08T22:55:49Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzM2MDM4Mzc5",
+      "title": "Reuse of DTLS 1.3 Record Layer Header",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/2",
+      "state": "CLOSED",
+      "author": "hannestschofenig",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2019-11-03T15:39:25Z",
+      "updatedAt": "2020-06-09T15:48:12Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "specialization",
+      "baseRefOid": "8a17bc81ecae54df18283def58e7fb5932b8916a",
+      "headRepository": "hannestschofenig/draft-rescorla-tls-ctls",
+      "headRefName": "patch-1",
+      "headRefOid": "6518020d6e50e20a249b8cd7fbbcf51cc2b0a621",
+      "closedAt": "2020-06-09T15:48:07Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "hannestschofenig",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Covert in PR #24 https://github.com/tlswg/draft-ietf-tls-ctls/pull/24",
+          "createdAt": "2020-06-09T15:48:07Z",
+          "updatedAt": "2020-06-09T15:48:07Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 3,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzM2MDM5MjQ1",
+      "title": "Removing the CBOR encoding idea",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/3",
+      "state": "MERGED",
+      "author": "hannestschofenig",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "CBOR is a too complex route IMHO",
+      "createdAt": "2019-11-03T15:47:05Z",
+      "updatedAt": "2019-11-03T18:44:48Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "specialization",
+      "baseRefOid": "8a17bc81ecae54df18283def58e7fb5932b8916a",
+      "headRepository": "hannestschofenig/draft-rescorla-tls-ctls",
+      "headRefName": "patch-2",
+      "headRefOid": "66fb6149a1fa409c7c4ce7f3e6f777b8f94a3b8a",
+      "closedAt": "2019-11-03T18:44:48Z",
+      "mergedAt": "2019-11-03T18:44:48Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "ea624cf466bc8b07d89c8d63566e0eff2a8dd8cf"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 4,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzM2MDQ1MzQ3",
+      "title": "Mapping for Ciphersuits",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/4",
+      "state": "MERGED",
+      "author": "hannestschofenig",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "CBOR is a too complex route IMHO",
+      "createdAt": "2019-11-03T16:43:29Z",
+      "updatedAt": "2019-11-03T18:46:41Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "specialization",
+      "baseRefOid": "8a17bc81ecae54df18283def58e7fb5932b8916a",
+      "headRepository": "hannestschofenig/draft-rescorla-tls-ctls",
+      "headRefName": "patch-3",
+      "headRefOid": "b17c69c24ec8382ae143aaa66280b7ab98eef9de",
+      "closedAt": "2019-11-03T18:46:41Z",
+      "mergedAt": "2019-11-03T18:46:41Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "57cf5c0416bff2216692b47094d14892fa0abbb5"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 5,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzM2MDU0MzU2",
+      "title": "Added named group mapping",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/5",
+      "state": "MERGED",
+      "author": "hannestschofenig",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2019-11-03T18:22:57Z",
+      "updatedAt": "2019-11-03T18:45:27Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "specialization",
+      "baseRefOid": "8a17bc81ecae54df18283def58e7fb5932b8916a",
+      "headRepository": "hannestschofenig/draft-rescorla-tls-ctls",
+      "headRefName": "patch-4",
+      "headRefOid": "0abe028b11b636974ed6071b30686516f44fcbcc",
+      "closedAt": "2019-11-03T18:45:27Z",
+      "mergedAt": "2019-11-03T18:45:27Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "ff57057a4fbdc085a87cd0345a8a025d9b835d46"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 6,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzM2MDU1NDYw",
+      "title": "Text for HelloRetryRequest",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/6",
+      "state": "CLOSED",
+      "author": "hannestschofenig",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2019-11-03T18:35:29Z",
+      "updatedAt": "2019-11-04T20:35:47Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "specialization",
+      "baseRefOid": "8a17bc81ecae54df18283def58e7fb5932b8916a",
+      "headRepository": "hannestschofenig/draft-rescorla-tls-ctls",
+      "headRefName": "patch-5",
+      "headRefOid": "55d8e9e0fd15210476686edbb41c6470c911052c",
+      "closedAt": "2019-11-04T20:35:47Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Do you really think that it is a good idea to encode HRR the same way as we did in TLS 1.3?  We're relying on signaling in the ServerHello.random where we don't really need to.  Worse, we're entertaining the possibility of making that field shorter, which makes this sort of signaling far more challenging as it removes space for real freshness.\r\n\r\nWe reserved the handshake type codepoint.  Would it be possible to use that?",
+          "createdAt": "2019-11-04T02:23:25Z",
+          "updatedAt": "2019-11-04T02:23:25Z"
+        },
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes, that is the plan that Richard and I worked out offline.",
+          "createdAt": "2019-11-04T02:34:02Z",
+          "updatedAt": "2019-11-04T02:34:02Z"
+        },
+        {
+          "author": "hannestschofenig",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I changed the text to include an optimized HRR, which is similar to what was in previous version of TLS 1.3 (without the special value encoded in the random and the extra fields for backwards compatibility).",
+          "createdAt": "2019-11-04T07:00:01Z",
+          "updatedAt": "2019-11-04T07:00:01Z"
+        },
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "merged by hand",
+          "createdAt": "2019-11-04T20:35:47Z",
+          "updatedAt": "2019-11-04T20:35:47Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 7,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzM2MDU3Mjk1",
+      "title": "Acknowledgments and minor typos",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/7",
+      "state": "MERGED",
+      "author": "hannestschofenig",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2019-11-03T18:54:33Z",
+      "updatedAt": "2019-11-04T18:18:51Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "specialization",
+      "baseRefOid": "7224d3781fbfbb52a7def89f27310fb46a7917f9",
+      "headRepository": "hannestschofenig/draft-rescorla-tls-ctls",
+      "headRefName": "patch-6",
+      "headRefOid": "472c3aedee95456b143fec9754f9045982aebb95",
+      "closedAt": "2019-11-04T18:18:51Z",
+      "mergedAt": "2019-11-04T18:18:51Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "62f64989fe0dbf5d80cfa82cf0837033abac735b"
+      },
+      "comments": [
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Something went wrong with this PR. It is removing the tables that @hannestschofenig put in",
+          "createdAt": "2019-11-03T19:05:27Z",
+          "updatedAt": "2019-11-03T19:05:27Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 8,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzM2MDU4NTg1",
+      "title": "Updates to the key share structure",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/8",
+      "state": "MERGED",
+      "author": "hannestschofenig",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2019-11-03T19:09:24Z",
+      "updatedAt": "2019-11-03T20:05:48Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "specialization",
+      "baseRefOid": "57cf5c0416bff2216692b47094d14892fa0abbb5",
+      "headRepository": "hannestschofenig/draft-rescorla-tls-ctls",
+      "headRefName": "patch-7",
+      "headRefOid": "58e649a9724cb6edcdd0f8063c3dd256a7e1de1b",
+      "closedAt": "2019-11-03T20:05:47Z",
+      "mergedAt": "2019-11-03T20:05:47Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "7224d3781fbfbb52a7def89f27310fb46a7917f9"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 9,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzM2MDgwMzQ4",
+      "title": "Review of the wrong branch",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/9",
+      "state": "CLOSED",
+      "author": "bifurcation",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This is on the wrong branch, but a lot of it is still relevant on the specialization branch.",
+      "createdAt": "2019-11-03T23:09:29Z",
+      "updatedAt": "2019-11-04T21:18:50Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "eaf1f2397ae70d96ac3a7c6a37729b76467e4d5f",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "rlb-review",
+      "headRefOid": "33b2b7250f9b0c7349125fea3c5d6870baf5ceb2",
+      "closedAt": "2019-11-04T21:18:50Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MzEwODU5Njc4",
+          "commit": {
+            "abbreviatedOid": "33b2b72"
+          },
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "I see where you are going here. I will try to merge these in tomorrow AM, but it'll have to be by hand.\r\n\r\nIf you can focus your attention on the specializing stuff, which I don't plan to work on before then, that would be cool.",
+          "createdAt": "2019-11-04T02:03:21Z",
+          "updatedAt": "2019-11-04T02:32:43Z",
+          "comments": [
+            {
+              "originalPosition": 33,
+              "body": "semantics.",
+              "createdAt": "2019-11-04T02:03:21Z",
+              "updatedAt": "2019-11-04T02:32:43Z"
+            },
+            {
+              "originalPosition": 36,
+              "body": "TLSPlaintext",
+              "createdAt": "2019-11-04T02:03:28Z",
+              "updatedAt": "2019-11-04T02:32:43Z"
+            },
+            {
+              "originalPosition": 40,
+              "body": "I don't think I understand this text. Isn't it backwards? Why would they be TLSCiphertext in the second version",
+              "createdAt": "2019-11-04T02:04:13Z",
+              "updatedAt": "2019-11-04T02:32:43Z"
+            },
+            {
+              "originalPosition": 62,
+              "body": "OK, so we'll remove this?",
+              "createdAt": "2019-11-04T02:04:41Z",
+              "updatedAt": "2019-11-04T02:32:43Z"
+            },
+            {
+              "originalPosition": 230,
+              "body": "Is this just \"minimizing unnecessary changes\"",
+              "createdAt": "2019-11-04T02:06:22Z",
+              "updatedAt": "2019-11-04T02:32:43Z"
+            },
+            {
+              "originalPosition": 250,
+              "body": "I don't think I quite understand how this works.",
+              "createdAt": "2019-11-04T02:06:54Z",
+              "updatedAt": "2019-11-04T02:32:43Z"
+            },
+            {
+              "originalPosition": 265,
+              "body": "OK.",
+              "createdAt": "2019-11-04T02:07:02Z",
+              "updatedAt": "2019-11-04T02:32:44Z"
+            },
+            {
+              "originalPosition": 275,
+              "body": "OK.",
+              "createdAt": "2019-11-04T02:31:55Z",
+              "updatedAt": "2019-11-04T02:32:44Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MzEwODYyOTg1",
+          "commit": {
+            "abbreviatedOid": "33b2b72"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2019-11-04T02:34:50Z",
+          "updatedAt": "2019-11-04T02:41:05Z",
+          "comments": [
+            {
+              "originalPosition": 79,
+              "body": "```suggestion\r\nOverhead: 1 byte per handshake message.\r\n```",
+              "createdAt": "2019-11-04T02:34:51Z",
+              "updatedAt": "2019-11-04T02:41:05Z"
+            },
+            {
+              "originalPosition": 140,
+              "body": "2? the extensions have a length too",
+              "createdAt": "2019-11-04T02:37:19Z",
+              "updatedAt": "2019-11-04T02:41:05Z"
+            },
+            {
+              "originalPosition": 250,
+              "body": "Define a profile that says:\r\n\r\ns/entire Certificate message/a single varint identifier that selects from a table/",
+              "createdAt": "2019-11-04T02:39:28Z",
+              "updatedAt": "2019-11-04T02:41:05Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzM2MDgyODEw",
+      "title": "RLB suggestion on specialization",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/10",
+      "state": "CLOSED",
+      "author": "bifurcation",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The existing section is basically syntactic sugar on top of this.  I think factoring it this way it's easier to see how to implement it.",
+      "createdAt": "2019-11-03T23:36:01Z",
+      "updatedAt": "2019-11-04T20:13:00Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "specialization",
+      "baseRefOid": "7224d3781fbfbb52a7def89f27310fb46a7917f9",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "rlb-specialization",
+      "headRefOid": "14e08ab18c916cd09ec637f68e02ee76dd1812e9",
+      "closedAt": "2019-11-04T20:13:00Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "hannestschofenig",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I would put the example specializations into the appendix. In general, however, I was wondering whether we need something a bit more formal to describe the out-of-band agreement regarding the parameters both parties need to have. Ekr proposed a JSON type syntax and you put your example code in there. ",
+          "createdAt": "2019-11-04T06:44:05Z",
+          "updatedAt": "2019-11-04T06:44:05Z"
+        },
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think we're going to abandon this. It's more documentation of Richard's impl",
+          "createdAt": "2019-11-04T18:20:04Z",
+          "updatedAt": "2019-11-04T18:20:04Z"
+        },
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Superseded by rlb-2",
+          "createdAt": "2019-11-04T20:13:00Z",
+          "updatedAt": "2019-11-04T20:13:00Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 11,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzM2NDIwNTQy",
+      "title": "Revision of the specialization section",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/11",
+      "state": "MERGED",
+      "author": "bifurcation",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This is semantically consistent with the code in mint, just with a slightly different syntax.",
+      "createdAt": "2019-11-04T18:38:56Z",
+      "updatedAt": "2019-11-04T20:12:25Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "specialization",
+      "baseRefOid": "62f64989fe0dbf5d80cfa82cf0837033abac735b",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "rlb-specialization-2",
+      "headRefOid": "d8099d35ffe05f5a9edb32b0fea9c54cdae941ee",
+      "closedAt": "2019-11-04T20:12:25Z",
+      "mergedAt": "2019-11-04T20:12:24Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "d8099d35ffe05f5a9edb32b0fea9c54cdae941ee"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 12,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzM2NDYyNjA3",
+      "title": "Added my name",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/12",
+      "state": "MERGED",
+      "author": "hannestschofenig",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2019-11-04T20:28:40Z",
+      "updatedAt": "2019-11-04T21:00:22Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "specialization",
+      "baseRefOid": "699c590fc2bf089a44c516eac0a895745a0f5c52",
+      "headRepository": "hannestschofenig/draft-rescorla-tls-ctls",
+      "headRefName": "patch-8",
+      "headRefOid": "35b4a837f013f2a7ea71409a691a46002ba94fc9",
+      "closedAt": "2019-11-04T21:00:22Z",
+      "mergedAt": "2019-11-04T21:00:22Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "8bad56c2f766b2459c4e54fd7e0ebc5af5dc020d"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MzExMzU0ODkw",
+          "commit": {
+            "abbreviatedOid": "35b4a83"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2019-11-04T21:00:16Z",
+          "updatedAt": "2019-11-04T21:00:16Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzM2NDczNjAx",
+      "title": "(1) Remove the handshake message length. It seems redundant when",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/13",
+      "state": "MERGED",
+      "author": "ekr",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "everything else is self-delimiting and is just a source of confusion\r\n(5) Replace PSK TODO with an open issue marker\r\n(6) use varints instead of remainder of message. Got a bit carried away",
+      "createdAt": "2019-11-04T20:57:20Z",
+      "updatedAt": "2019-11-04T21:00:01Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "ee86827aca1f3634087bad9476adf1416d7e678e",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "richard_simplifications",
+      "headRefOid": "0c107c856d45fc2113ceb8970c29c7c7efbbbeeb",
+      "closedAt": "2019-11-04T21:00:01Z",
+      "mergedAt": "2019-11-04T21:00:01Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "1a2af26fdbe8d93a09b322dd736d6b85af57f21d"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MzExMzU0NTU2",
+          "commit": {
+            "abbreviatedOid": "0c107c8"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2019-11-04T20:59:47Z",
+          "updatedAt": "2019-11-04T20:59:47Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzM2NDc2Mzcy",
+      "title": "Moved tables to IANA consideration section",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/14",
+      "state": "CLOSED",
+      "author": "hannestschofenig",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2019-11-04T21:03:23Z",
+      "updatedAt": "2019-11-04T21:18:38Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "richard_simplifications",
+      "baseRefOid": "0c107c856d45fc2113ceb8970c29c7c7efbbbeeb",
+      "headRepository": "hannestschofenig/draft-rescorla-tls-ctls",
+      "headRefName": "patch-9",
+      "headRefOid": "f8ec41ae6f5b916ed7f6410c4516f776e778d28d",
+      "closedAt": "2019-11-04T21:18:38Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Obsolete, since we're just using standard 2-byte suites for now.",
+          "createdAt": "2019-11-04T21:18:38Z",
+          "updatedAt": "2019-11-04T21:18:38Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 15,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzM2NDc2ODY0",
+      "title": "Revert version negotiation to extensions",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/15",
+      "state": "MERGED",
+      "author": "ekr",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2019-11-04T21:04:22Z",
+      "updatedAt": "2019-11-04T21:06:21Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "1a2af26fdbe8d93a09b322dd736d6b85af57f21d",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "move_versions_back",
+      "headRefOid": "e421fe23dfa12ce465a1c34f7d0d06ebffd6b51e",
+      "closedAt": "2019-11-04T21:06:21Z",
+      "mergedAt": "2019-11-04T21:06:21Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "0238ed55cf26b83bf5aaeacd0cb4cd41859258d7"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MzExMzU3MzI3",
+          "commit": {
+            "abbreviatedOid": "e421fe2"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2019-11-04T21:04:58Z",
+          "updatedAt": "2019-11-04T21:04:58Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MzExMzU3OTkz",
+          "commit": {
+            "abbreviatedOid": "e421fe2"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2019-11-04T21:06:13Z",
+          "updatedAt": "2019-11-04T21:06:13Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzM2NDgwOTM3",
+      "title": "Remove defaults and overhead",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/16",
+      "state": "MERGED",
+      "author": "bifurcation",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2019-11-04T21:12:46Z",
+      "updatedAt": "2019-11-04T21:14:03Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "0238ed55cf26b83bf5aaeacd0cb4cd41859258d7",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "rlb-hs",
+      "headRefOid": "46d700f25f969e73909edc67d3ceb1b32b236c80",
+      "closedAt": "2019-11-04T21:14:03Z",
+      "mergedAt": "2019-11-04T21:14:03Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "13777e05aec972085aa558898a51966512566bc4"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 17,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzM2NDgxMzUz",
+      "title": "Remove custom code point tables.",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/17",
+      "state": "MERGED",
+      "author": "ekr",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2019-11-04T21:13:35Z",
+      "updatedAt": "2019-11-04T21:17:21Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "13777e05aec972085aa558898a51966512566bc4",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "remove_mapping_tables",
+      "headRefOid": "be050880966ec6f6ef39557dd070ff87a7887f8c",
+      "closedAt": "2019-11-04T21:17:21Z",
+      "mergedAt": "2019-11-04T21:17:21Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "5d5b702729bfa3ecf6be126b25fb9bcc05dcdefb"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MzExMzYzNTE1",
+          "commit": {
+            "abbreviatedOid": "2ee85af"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2019-11-04T21:16:35Z",
+          "updatedAt": "2019-11-04T21:16:35Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzM2NDg4NDEy",
+      "title": "Tweaks for consistency with mint",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/18",
+      "state": "MERGED",
+      "author": "bifurcation",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2019-11-04T21:28:29Z",
+      "updatedAt": "2019-11-04T21:30:14Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "5d5b702729bfa3ecf6be126b25fb9bcc05dcdefb",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "rlb-code",
+      "headRefOid": "66e4d8a85cff2ee72d388cc8f4bec48a64252ebf",
+      "closedAt": "2019-11-04T21:30:14Z",
+      "mergedAt": "2019-11-04T21:30:14Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "c70479960501c1cd6c63155504c864857f94358f"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 19,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzM2NDg4ODg5",
+      "title": "Editorial improvements to the security section",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/19",
+      "state": "MERGED",
+      "author": "hannestschofenig",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2019-11-04T21:29:38Z",
+      "updatedAt": "2019-11-04T21:31:32Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "5d5b702729bfa3ecf6be126b25fb9bcc05dcdefb",
+      "headRepository": "hannestschofenig/draft-rescorla-tls-ctls",
+      "headRefName": "patch-10",
+      "headRefOid": "c48f4d2fc0c7063e3223fc1a0734bdab2a8a1965",
+      "closedAt": "2019-11-04T21:31:31Z",
+      "mergedAt": "2019-11-04T21:31:31Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "8f347461a7e1d41f709be873c13d9eba7f4db172"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 20,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzM2NDk0NjMw",
+      "title": "Minor editorial work",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/20",
+      "state": "MERGED",
+      "author": "ekr",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2019-11-04T21:44:26Z",
+      "updatedAt": "2019-11-04T21:45:51Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "d77c2d87edac27487637ba3221a6eb4d6fafae3b",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "ekr_editorial",
+      "headRefOid": "b562f8c653d4f4b956a4daabd7d6550a9da4cb61",
+      "closedAt": "2019-11-04T21:45:51Z",
+      "mergedAt": "2019-11-04T21:45:51Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "3f87fdff3619b773c1ada3f4c322f8e9e45266f4"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MzExMzc5NTA2",
+          "commit": {
+            "abbreviatedOid": "b562f8c"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2019-11-04T21:45:46Z",
+          "updatedAt": "2019-11-04T21:45:46Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzM2NTA3OTIx",
+      "title": "Add annotated transcripts",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/21",
+      "state": "MERGED",
+      "author": "bifurcation",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2019-11-04T22:21:32Z",
+      "updatedAt": "2019-11-04T22:44:18Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "7a4b9e7eaa77fb3c228023cfe21cbf853a4cc199",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "transcript",
+      "headRefOid": "3eae6f89fcd7b8bf63d8fbf085e88a6f34bb4444",
+      "closedAt": "2019-11-04T22:44:18Z",
+      "mergedAt": "2019-11-04T22:44:18Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "3c711e9897ffb35cf912b4fa4e192378d3946251"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 22,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzM2NTE5MDk4",
+      "title": "Short finished",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/22",
+      "state": "MERGED",
+      "author": "ekr",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2019-11-04T22:57:00Z",
+      "updatedAt": "2019-11-04T23:04:33Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "3c711e9897ffb35cf912b4fa4e192378d3946251",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "short_finished",
+      "headRefOid": "dc927526f0807709ede9eeb29ccb3a5a538b583d",
+      "closedAt": "2019-11-04T23:04:33Z",
+      "mergedAt": "2019-11-04T23:04:33Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "8806475dbbe6f38d6f2c8010b65ca296e927b738"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MzExNDE1OTg2",
+          "commit": {
+            "abbreviatedOid": "dc92752"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2019-11-04T23:04:28Z",
+          "updatedAt": "2019-11-04T23:04:28Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 23,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzM4ODkyNDc1",
+      "title": "Minimize record framing overhead",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/23",
+      "state": "CLOSED",
+      "author": "bifurcation",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "When working over reliable transport, we really only need one varint worth of length on the outside of ciphertext records, and no framing at all for ClientHello / ServerHello.",
+      "createdAt": "2019-11-08T23:04:12Z",
+      "updatedAt": "2020-10-06T00:37:02Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "8806475dbbe6f38d6f2c8010b65ca296e927b738",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "record-layer",
+      "headRefOid": "93e0da4ee0de7c357213d83fc3cfd697a3b77098",
+      "closedAt": "2020-10-06T00:37:02Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 24,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzQyNTQwMzI2",
+      "title": "Compact record layer",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/24",
+      "state": "CLOSED",
+      "author": "bifurcation",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "* Use minimal framing (just length) for plaintext\r\n* Use DTLS framing for ciphertext",
+      "createdAt": "2019-11-19T08:01:58Z",
+      "updatedAt": "2020-11-02T17:49:45Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "8806475dbbe6f38d6f2c8010b65ca296e927b738",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "dtls-ish",
+      "headRefOid": "356455f923a0804d4357cdbc8e7f4c0d91a1cd1b",
+      "closedAt": "2020-11-02T17:49:45Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "LGTM minus comments.",
+          "createdAt": "2020-09-16T19:04:28Z",
+          "updatedAt": "2020-09-16T19:04:28Z"
+        },
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@hannestschofenig rewrote and I merged.",
+          "createdAt": "2020-11-02T17:40:44Z",
+          "updatedAt": "2020-11-02T17:40:44Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDM0MjA1MjIw",
+          "commit": {
+            "abbreviatedOid": "c252b25"
+          },
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "This generally looks good. A few comments/questions below.",
+          "createdAt": "2020-06-19T16:28:35Z",
+          "updatedAt": "2020-06-19T16:30:07Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "How are you expecting to distinguish encrypted and unencrypted records? Because the first byte does not have 0x20 set?",
+              "createdAt": "2020-06-19T16:28:35Z",
+              "updatedAt": "2020-09-08T14:17:27Z"
+            },
+            {
+              "originalPosition": 78,
+              "body": "This is just to have a fixed encoding, right? As it would ordinarily indicate an 8-bit length.",
+              "createdAt": "2020-06-19T16:29:39Z",
+              "updatedAt": "2020-09-08T14:17:27Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDM0MjI5MTI5",
+          "commit": {
+            "abbreviatedOid": "c252b25"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-06-19T17:10:54Z",
+          "updatedAt": "2020-06-19T17:10:54Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "The only unencrypted records are ClientHello and ServerHello, which are the first records in each direction.  Once you consume those, you switch over to this framing.",
+              "createdAt": "2020-06-19T17:10:54Z",
+              "updatedAt": "2020-09-08T14:17:27Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDM0MjI5NTYx",
+          "commit": {
+            "abbreviatedOid": "c252b25"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-06-19T17:11:37Z",
+          "updatedAt": "2020-06-19T17:11:37Z",
+          "comments": [
+            {
+              "originalPosition": 78,
+              "body": "Correct.  Either value is wrong (since there's no length field), so we might as well choose one.",
+              "createdAt": "2020-06-19T17:11:37Z",
+              "updatedAt": "2020-09-08T14:17:27Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDM0MjMxNTAw",
+          "commit": {
+            "abbreviatedOid": "c252b25"
+          },
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-06-19T17:15:07Z",
+          "updatedAt": "2020-06-19T17:15:07Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "That doesn't work for DTLS because you might get a retransmission.",
+              "createdAt": "2020-06-19T17:15:07Z",
+              "updatedAt": "2020-09-08T14:17:27Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDg5OTM3NDIy",
+          "commit": {
+            "abbreviatedOid": "356455f"
+          },
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-09-16T19:00:10Z",
+          "updatedAt": "2020-09-21T12:46:19Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "```suggestion\r\ncTLS-specific valud to distinguish cTLS plaintext records from encrypted\r\n```\r\nvalue",
+              "createdAt": "2020-09-16T19:00:10Z",
+              "updatedAt": "2020-09-21T12:46:19Z"
+            },
+            {
+              "originalPosition": 11,
+              "body": "Why not just use the current handshake value? Is the issue being able to demux cTLS from TLS?\r\n\r\nIf so, maybe let's call it ctls_handshake?\r\n",
+              "createdAt": "2020-09-16T19:00:50Z",
+              "updatedAt": "2020-09-21T12:46:19Z"
+            },
+            {
+              "originalPosition": 28,
+              "body": "I suggest we actually give this varint a but more structure.\r\n\r\nValues <= X are by registration\r\nValues > X are by mutual agreement.\r\n\r\n",
+              "createdAt": "2020-09-16T19:03:50Z",
+              "updatedAt": "2020-09-21T12:46:19Z"
+            },
+            {
+              "originalPosition": 28,
+              "body": "This seems oBE.",
+              "createdAt": "2020-09-16T19:03:58Z",
+              "updatedAt": "2020-09-21T12:46:19Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTIxNjkxMDcy",
+          "commit": {
+            "abbreviatedOid": "356455f"
+          },
+          "author": "hannestschofenig",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-11-02T14:43:52Z",
+          "updatedAt": "2020-11-02T14:43:53Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "s/valud/value\r\n",
+              "createdAt": "2020-11-02T14:43:52Z",
+              "updatedAt": "2020-11-02T14:43:53Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTIxNjkxNTcx",
+          "commit": {
+            "abbreviatedOid": "356455f"
+          },
+          "author": "hannestschofenig",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-11-02T14:44:24Z",
+          "updatedAt": "2020-11-02T14:44:25Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "Good idea. ",
+              "createdAt": "2020-11-02T14:44:25Z",
+              "updatedAt": "2020-11-02T14:44:25Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 25,
+      "id": "MDExOlB1bGxSZXF1ZXN0Mzc4NjQ0NzQx",
+      "title": "fix typos",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/25",
+      "state": "MERGED",
+      "author": "sgmenda",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I noticed a few minor typos while reading the draft.",
+      "createdAt": "2020-02-23T00:05:59Z",
+      "updatedAt": "2020-03-09T16:11:26Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "8806475dbbe6f38d6f2c8010b65ca296e927b738",
+      "headRepository": null,
+      "headRefName": "a_few_typos",
+      "headRefOid": "ae877f5a20ffd4776c9f8ae47773cb8552cc13c4",
+      "closedAt": "2020-03-09T16:11:26Z",
+      "mergedAt": "2020-03-09T16:11:26Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "8b4c5a3658ef3f48610eaf60f65ffd8fd569111a"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 26,
+      "id": "MDExOlB1bGxSZXF1ZXN0Mzg1Njc0OTAy",
+      "title": "Fully use varints",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/26",
+      "state": "MERGED",
+      "author": "ekr",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "@chris-wood ",
+      "createdAt": "2020-03-09T16:02:56Z",
+      "updatedAt": "2020-11-02T14:46:50Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "8806475dbbe6f38d6f2c8010b65ca296e927b738",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "full_varint",
+      "headRefOid": "0dbe6af0440b0758197f92e93b213c7b9b59cd0e",
+      "closedAt": "2020-11-02T14:46:50Z",
+      "mergedAt": "2020-11-02T14:46:50Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "115018732ba02a11214a3f97d4d0f2ca5a3d2aa8"
+      },
+      "comments": [
+        {
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Suggested expansion on the intro:\r\n```\r\ncTLS replaces all integers in TLS with varints, including:\r\n\r\n* Values of uint8, uint16, uint24, uint32, and uint64\r\n* Vector length prefixes\r\n* Enum / code point values\r\n\r\nWe do not show the structures which only change in this way.\r\n\r\nThis allows implementations' encoding and decoding logic to implement cTLS\r\nsimply by having a mode in which integers always use the varint encoding.  Note\r\nthat if implementations treat opaque data in the same way as `uint8` values,\r\nthey MUST NOT convert the bytes of an opaque value to varints.\r\n\r\nAs an example, suppose we are given the following struct:\r\n\r\n~~~~\r\n      struct {\r\n          uint32 FieldA;\r\n          opaque FieldB<0..2^16-1>;\r\n      } ExampleStruct;\r\n~~~~\r\n\r\nEncoding a value of this type with values FieldA=0x0A and FieldB=0x0B0B0B0B0B\r\nwould result in the following octet strings in \"normal\" (RFC 8446) and \"compact\"\r\nmodes, respectively:\r\n\r\n~~~~~\r\nNormal:  0000000A00050B0B0B0B0B\r\nCompact: 0A050B0B0B0B0B\r\n~~~~~\r\n\r\n```",
+          "createdAt": "2020-03-09T19:51:35Z",
+          "updatedAt": "2020-03-09T19:51:35Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MzcxMzE1NTA3",
+          "commit": {
+            "abbreviatedOid": "bef8970"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-03-09T16:04:06Z",
+          "updatedAt": "2020-03-09T16:04:24Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "```suggestion\r\ncTLS replaces all the integers in TLS (including code points) with\r\n```",
+              "createdAt": "2020-03-09T16:04:06Z",
+              "updatedAt": "2020-11-02T14:38:16Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MzcxNDc4NzM4",
+          "commit": {
+            "abbreviatedOid": "aa52642"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-03-09T19:47:09Z",
+          "updatedAt": "2020-03-09T19:47:09Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTAyNTA4ODkw",
+          "commit": {
+            "abbreviatedOid": "aa52642"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-10-06T00:33:27Z",
+          "updatedAt": "2020-10-06T00:35:57Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "One thing I noticed when I tried to implement this is: If an implementation implements `opaque` as `vector<uint8>`, then the `uint8` entries might expand.  In general, it seems like there's no point to applying `varint` to `uint8`, since it only hurts.  Suggest:\r\n\r\n```suggestion\r\ncTLS uses the varint encoding for all multi-byte integers in TLS,\r\nincluding:\r\n\r\n* Values of type uint16, uint24, uint32, uint64\r\n* Array and vector entries of these types\r\n* Encoded lengths for vectors that allow more than 255 entries\r\n* Enums that allow more than 255 entries\r\n\r\nValues of type uint8, opaque values, and one-byte enums are not\r\naffected.  We do not show the structures which only change in this way.\r\n```",
+              "createdAt": "2020-10-06T00:33:28Z",
+              "updatedAt": "2020-11-02T14:38:16Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 27,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDMxOTA4Mzg4",
+      "title": "Updated Record Layer Text",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/27",
+      "state": "MERGED",
+      "author": "hannestschofenig",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Made sequence numbers optional",
+      "createdAt": "2020-06-09T16:04:25Z",
+      "updatedAt": "2020-06-10T18:00:39Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "dtls-ish",
+      "baseRefOid": "77e035bd2fb89c7248675ec43a227ffaa16653dd",
+      "headRepository": "hannestschofenig/draft-rescorla-tls-ctls",
+      "headRefName": "patch-1",
+      "headRefOid": "f5077d8c839dd5ed600543b307f6a0cea381b15e",
+      "closedAt": "2020-06-10T18:00:39Z",
+      "mergedAt": "2020-06-10T18:00:39Z",
+      "mergedBy": "bifurcation",
+      "mergeCommit": {
+        "oid": "6f99670d16927266413774e9c2e6322f7bf9ff4f"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 28,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDg4MTkzMTU2",
+      "title": "Quic style varints",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/28",
+      "state": "CLOSED",
+      "author": "ekr",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-09-16T19:15:19Z",
+      "updatedAt": "2022-02-25T19:56:37Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "9c58d320e1870e17837df3748c525638f9423c87",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "quic_style_varints",
+      "headRefOid": "f12d9805b1f6ed2d4b7c28dfdd470c4eca388a81",
+      "closedAt": "2022-02-25T19:56:36Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@hannestschofenig @chris-wood ",
+          "createdAt": "2020-09-16T23:12:26Z",
+          "updatedAt": "2020-09-16T23:12:26Z"
+        },
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@chris-wood I guess we should maybe ask the WG?\r\n",
+          "createdAt": "2020-10-06T00:31:54Z",
+          "updatedAt": "2020-10-06T00:31:54Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Probably wouldn't hurt, yeah.",
+          "createdAt": "2020-10-06T00:32:45Z",
+          "updatedAt": "2020-10-06T00:32:45Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Per #35, I think this should be closed.",
+          "createdAt": "2022-02-23T16:35:51Z",
+          "updatedAt": "2022-02-23T16:35:51Z"
+        },
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "We decided not to do this.",
+          "createdAt": "2022-02-25T19:56:36Z",
+          "updatedAt": "2022-02-25T19:56:36Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTAyNTA3MTQz",
+          "commit": {
+            "abbreviatedOid": "c007e20"
+          },
+          "author": "bifurcation",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "LGTM, with nits",
+          "createdAt": "2020-10-06T00:27:21Z",
+          "updatedAt": "2020-10-06T00:28:06Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "```suggestion\r\nThis means that integers are encoded on 1, 2, 4, or 8 bytes and can encode 6-,\r\n14-, 30-, or 62-bit values respectively.  {{integer-summary}} summarizes the\r\n```",
+              "createdAt": "2020-10-06T00:27:21Z",
+              "updatedAt": "2020-10-06T00:31:39Z"
+            },
+            {
+              "originalPosition": 37,
+              "body": "```suggestion\r\nFor example, the eight-byte sequence c2 19 7c 5e ff 14 e8 8c (in hexadecimal)\r\n```",
+              "createdAt": "2020-10-06T00:27:32Z",
+              "updatedAt": "2020-10-06T00:31:39Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 29,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTEzNjAyOTg2",
+      "title": "Revised version of cTLS",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/29",
+      "state": "MERGED",
+      "author": "hannestschofenig",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This update aims to bring the template-based optimization to the center and focuses on the certificiate-based authentication exchange.\r\nIncluded in this version is the idea to omit the random values transmitted by the client and the server by hashes of the ephemeral public keys.",
+      "createdAt": "2020-11-01T11:17:33Z",
+      "updatedAt": "2021-07-12T10:49:51Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "f573eaf5d9994accc0250061682d0747c804660a",
+      "headRepository": "hannestschofenig/draft-rescorla-tls-ctls",
+      "headRefName": "patch-11",
+      "headRefOid": "3bf831899df067c00fa50380754bd5f6207b96c9",
+      "closedAt": "2021-07-12T10:49:50Z",
+      "mergedAt": "2021-07-12T10:49:50Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "8208ab789a0f49654536806037288aa032d1dd4b"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3Njk3NjMxMTE4",
+          "commit": {
+            "abbreviatedOid": "5445d2e"
+          },
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-07-01T20:30:30Z",
+          "updatedAt": "2021-07-01T20:35:29Z",
+          "comments": [
+            {
+              "originalPosition": 181,
+              "body": "```suggestion\r\nAlthough the template-based specialization mechanisms described here are general,\r\nwe also include specific mechanism for certificate-based exchanges because those are\r\nwhere the most complexity and size reduction can be obtained. Most\r\nexchanges in TLS 1.3 are highly optimized and do not require compression to be used. \r\n```",
+              "createdAt": "2021-07-01T20:30:30Z",
+              "updatedAt": "2021-07-01T20:35:30Z"
+            },
+            {
+              "originalPosition": 221,
+              "body": "Don't we want the entire KeyShare extension?\r\n\r\nAlso, I don't think when it's \"omitted\" but rather when it's 0. That way, the default is current TLS, which seems like a good practice.",
+              "createdAt": "2021-07-01T20:32:14Z",
+              "updatedAt": "2021-07-01T20:35:30Z"
+            },
+            {
+              "originalPosition": 226,
+              "body": "Isn't this actually \"we are going to pretend CR was sent but it wasnt really\"?",
+              "createdAt": "2021-07-01T20:33:10Z",
+              "updatedAt": "2021-07-01T20:35:30Z"
+            },
+            {
+              "originalPosition": 248,
+              "body": "This doesn't seem right unless you are pinning down the entire group.\r\n\r\nISTM that one could have:\r\n\r\n- Extension order: then you just get to omit the type and length (I believe all current extensions are internally self-delimited)\r\n- One group key shares.\r\n\r\nAnd you could use one or both.\r\n\r\n",
+              "createdAt": "2021-07-01T20:34:40Z",
+              "updatedAt": "2021-07-01T20:35:30Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3Njk5NzQxMjg3",
+          "commit": {
+            "abbreviatedOid": "2d18dec"
+          },
+          "author": "hannestschofenig",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-07-06T09:33:05Z",
+          "updatedAt": "2021-07-06T09:33:05Z",
+          "comments": [
+            {
+              "originalPosition": 221,
+              "body": "I removed the part about creating the Random values via hashing of the DH public keys. We can add that again later",
+              "createdAt": "2021-07-06T09:33:05Z",
+              "updatedAt": "2021-07-06T09:33:05Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3Njk5NzQxOTE5",
+          "commit": {
+            "abbreviatedOid": "2d18dec"
+          },
+          "author": "hannestschofenig",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-07-06T09:33:42Z",
+          "updatedAt": "2021-07-06T09:33:43Z",
+          "comments": [
+            {
+              "originalPosition": 226,
+              "body": "Yes. Should we phrase it differently?",
+              "createdAt": "2021-07-06T09:33:43Z",
+              "updatedAt": "2021-07-06T09:33:43Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3Njk5NzU1NjMx",
+          "commit": {
+            "abbreviatedOid": "01687f5"
+          },
+          "author": "hannestschofenig",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-07-06T09:47:52Z",
+          "updatedAt": "2021-07-06T09:47:53Z",
+          "comments": [
+            {
+              "originalPosition": 248,
+              "body": "I added a clarifying note.",
+              "createdAt": "2021-07-06T09:47:52Z",
+              "updatedAt": "2021-07-06T09:47:53Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzAyNDg0NzQ2",
+          "commit": {
+            "abbreviatedOid": "898285d"
+          },
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-07-08T20:44:59Z",
+          "updatedAt": "2021-07-08T20:58:07Z",
+          "comments": [
+            {
+              "originalPosition": 50,
+              "body": "```suggestion\r\n:\r\n```",
+              "createdAt": "2021-07-08T20:44:59Z",
+              "updatedAt": "2021-07-08T20:58:07Z"
+            },
+            {
+              "originalPosition": 52,
+              "body": "```suggestion\r\n- the negotiation of algorithm parameters, and extensions,  as well as \r\n- the exchange of certificates. \r\n```",
+              "createdAt": "2021-07-08T20:45:17Z",
+              "updatedAt": "2021-07-08T20:58:08Z"
+            },
+            {
+              "originalPosition": 240,
+              "body": "```suggestion\r\nwhere the most complexity and size reduction can be obtained. Most of the other exchanges in \r\nTLS 1.3 are highly optimized and do not require compression to be used. \r\n```",
+              "createdAt": "2021-07-08T20:54:17Z",
+              "updatedAt": "2021-07-08T20:58:08Z"
+            },
+            {
+              "originalPosition": 309,
+              "body": "I think we'd have to explain how we knew that to be the case. There's no indication that this is the exclusive list.\r\n\r\nAlso, aren't all the extensions self-delimiting? If so, can we always remove the extension length?\r\n\r\nAt this point do you just want to put an OPEN ISSUE here?",
+              "createdAt": "2021-07-08T20:56:11Z",
+              "updatedAt": "2021-07-08T20:58:08Z"
+            },
+            {
+              "originalPosition": 584,
+              "body": "This got removed, so you should remove it, right?",
+              "createdAt": "2021-07-08T20:57:10Z",
+              "updatedAt": "2021-07-08T20:58:08Z"
+            },
+            {
+              "originalPosition": 226,
+              "body": "I think we would need to lay some groundwork earlier. Do we have a general statement for when this kind of optimization would be possible?",
+              "createdAt": "2021-07-08T20:58:00Z",
+              "updatedAt": "2021-07-08T20:58:08Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzAzMTMwMTc0",
+          "commit": {
+            "abbreviatedOid": "3bf8318"
+          },
+          "author": "hannestschofenig",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-07-09T14:50:34Z",
+          "updatedAt": "2021-07-09T14:50:35Z",
+          "comments": [
+            {
+              "originalPosition": 226,
+              "body": "The entire issue here is whether we want to pre-define that the client has to authenticate itself to the server. If so, then with TLS 1.3 the server has to send the CertificateRequest message. If we want to obmit this message then this configuration option was supposed to indicate this functionality. \r\n\r\nAs a consequence, the Client would send a Certificate + CertificateVerify message without receiving a CertificateRequest message first. \r\n\r\nIs the term \"mutualAuth\" better replaced by something like \"skipCertificateRequest\" or \"implicitCertificateRequest\"? Maybe.",
+              "createdAt": "2021-07-09T14:50:34Z",
+              "updatedAt": "2021-07-09T14:50:35Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzAzMTMwOTAw",
+          "commit": {
+            "abbreviatedOid": "3bf8318"
+          },
+          "author": "hannestschofenig",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-07-09T14:51:19Z",
+          "updatedAt": "2021-07-09T14:51:19Z",
+          "comments": [
+            {
+              "originalPosition": 584,
+              "body": "I created a note in form of an open issue. ",
+              "createdAt": "2021-07-09T14:51:19Z",
+              "updatedAt": "2021-07-09T14:51:19Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 30,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTE0MTkxMjM5",
+      "title": "Record Layer Updates",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/30",
+      "state": "MERGED",
+      "author": "hannestschofenig",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-11-02T16:53:13Z",
+      "updatedAt": "2020-11-02T17:39:36Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "115018732ba02a11214a3f97d4d0f2ca5a3d2aa8",
+      "headRepository": "hannestschofenig/draft-rescorla-tls-ctls",
+      "headRefName": "patch-12",
+      "headRefOid": "1b7df4f31b2f57b89b80235850844964c3e622fe",
+      "closedAt": "2020-11-02T17:39:35Z",
+      "mergedAt": "2020-11-02T17:39:35Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "f55ff298f1f0b66220436f24d7d63e65eda44209"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTIxODM1MTE5",
+          "commit": {
+            "abbreviatedOid": "9e8d1fe"
+          },
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-11-02T17:12:56Z",
+          "updatedAt": "2020-11-02T17:15:23Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "Why can't we just use handshake here? It's distinguishable from the encrypted DTLS content types.",
+              "createdAt": "2020-11-02T17:13:40Z",
+              "updatedAt": "2020-11-02T17:36:20Z"
+            },
+            {
+              "originalPosition": 27,
+              "body": "```suggestion\r\n          ContentType content_type = ctls_handshake;\r\n```",
+              "createdAt": "2020-11-02T17:14:22Z",
+              "updatedAt": "2020-11-02T17:36:20Z"
+            },
+            {
+              "originalPosition": 28,
+              "body": "Do these have to match? What comes from the server?",
+              "createdAt": "2020-11-02T17:14:35Z",
+              "updatedAt": "2020-11-02T17:36:20Z"
+            },
+            {
+              "originalPosition": 128,
+              "body": "I suggest that we require standards action for all profile IDs that would fit in 2 octets.",
+              "createdAt": "2020-11-02T17:15:20Z",
+              "updatedAt": "2020-11-02T17:36:20Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTIxODUwMjA0",
+          "commit": {
+            "abbreviatedOid": "6965f37"
+          },
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-11-02T17:31:20Z",
+          "updatedAt": "2020-11-02T17:31:20Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "nm. I see why.",
+              "createdAt": "2020-11-02T17:31:20Z",
+              "updatedAt": "2020-11-02T17:36:20Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTIxODUyMDA5",
+          "commit": {
+            "abbreviatedOid": "d74d459"
+          },
+          "author": "hannestschofenig",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-11-02T17:33:41Z",
+          "updatedAt": "2020-11-02T17:33:41Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "We would only need a profile ID transmitted in the ClientHello. As such, I wonder whether we should omit the profile_id for ServerHellos?",
+              "createdAt": "2020-11-02T17:33:41Z",
+              "updatedAt": "2020-11-02T17:36:20Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTIxODUyOTU0",
+          "commit": {
+            "abbreviatedOid": "d74d459"
+          },
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-11-02T17:34:55Z",
+          "updatedAt": "2020-11-02T17:35:33Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "Maybe an open issue marker?",
+              "createdAt": "2020-11-02T17:34:56Z",
+              "updatedAt": "2020-11-02T17:36:20Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTIxODU0MjU2",
+          "commit": {
+            "abbreviatedOid": "1b7df4f"
+          },
+          "author": "hannestschofenig",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-11-02T17:36:47Z",
+          "updatedAt": "2020-11-02T17:36:47Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "Done. ",
+              "createdAt": "2020-11-02T17:36:47Z",
+              "updatedAt": "2020-11-02T17:36:47Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 31,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTE0MTk0MzQy",
+      "title": "Editorial Changes",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/31",
+      "state": "MERGED",
+      "author": "hannestschofenig",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2020-11-02T16:58:21Z",
+      "updatedAt": "2020-11-02T17:40:11Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "115018732ba02a11214a3f97d4d0f2ca5a3d2aa8",
+      "headRepository": "hannestschofenig/draft-rescorla-tls-ctls",
+      "headRefName": "patch-13",
+      "headRefOid": "a67617240796e856192cd31ccae8b5804a6e4537",
+      "closedAt": "2020-11-02T17:40:10Z",
+      "mergedAt": "2020-11-02T17:40:10Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "f573eaf5d9994accc0250061682d0747c804660a"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTIxODMwOTYx",
+          "commit": {
+            "abbreviatedOid": "a676172"
+          },
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-11-02T17:10:40Z",
+          "updatedAt": "2020-11-02T17:10:57Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "Why did you remove this?",
+              "createdAt": "2020-11-02T17:10:40Z",
+              "updatedAt": "2020-11-02T17:10:57Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 32,
+      "id": "MDExOlB1bGxSZXF1ZXN0Njg3NzMwMzMx",
+      "title": "* Clarify mutualaAuth",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/32",
+      "state": "MERGED",
+      "author": "ekr",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "* Remove redundant file",
+      "createdAt": "2021-07-12T10:53:32Z",
+      "updatedAt": "2021-07-12T11:52:08Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "8208ab789a0f49654536806037288aa032d1dd4b",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "ctls_mutual_auth",
+      "headRefOid": "dbc8e95e8f58c881dc423c399fdf11788343192e",
+      "closedAt": "2021-07-12T11:52:08Z",
+      "mergedAt": "2021-07-12T11:52:08Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "b737cc9f8bd7547aca65edea4cab2c66b1496ef8"
+      },
+      "comments": [
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@hannestschofenig this is the clarification I intended.",
+          "createdAt": "2021-07-12T10:53:56Z",
+          "updatedAt": "2021-07-12T10:53:56Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 33,
+      "id": "MDExOlB1bGxSZXF1ZXN0Njg3OTk2ODIz",
+      "title": "Editorial Bugfix",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/33",
+      "state": "MERGED",
+      "author": "hannestschofenig",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-07-12T16:38:41Z",
+      "updatedAt": "2021-07-12T16:43:47Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "b737cc9f8bd7547aca65edea4cab2c66b1496ef8",
+      "headRepository": "hannestschofenig/draft-rescorla-tls-ctls",
+      "headRefName": "patch-14",
+      "headRefOid": "c19c897a65163f6dfea932dd492dd0674244dcb0",
+      "closedAt": "2021-07-12T16:42:40Z",
+      "mergedAt": "2021-07-12T16:42:40Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "5015fa574d0671060d99b8e2a26941a7d4a3a2d5"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 34,
+      "id": "MDExOlB1bGxSZXF1ZXN0Njg4MDAwNjE0",
+      "title": "Buggy reference fixed",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/34",
+      "state": "CLOSED",
+      "author": "hannestschofenig",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-07-12T16:44:49Z",
+      "updatedAt": "2022-02-25T19:56:55Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "5015fa574d0671060d99b8e2a26941a7d4a3a2d5",
+      "headRepository": "hannestschofenig/draft-rescorla-tls-ctls",
+      "headRefName": "patch-14",
+      "headRefOid": "166cb8633ae34d4b27774c21db171af91b13d596",
+      "closedAt": "2022-02-25T19:56:55Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 36,
+      "id": "MDExOlB1bGxSZXF1ZXN0NzAxMzUwNzk3",
+      "title": "Removal of varint encoding",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/36",
+      "state": "MERGED",
+      "author": "hannestschofenig",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-08-02T10:44:26Z",
+      "updatedAt": "2021-10-25T10:31:07Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "5015fa574d0671060d99b8e2a26941a7d4a3a2d5",
+      "headRepository": "hannestschofenig/draft-rescorla-tls-ctls",
+      "headRefName": "patch-15",
+      "headRefOid": "a388c55eded5c1b0c81b0c65ccef26ac6a850f4f",
+      "closedAt": "2021-10-25T10:31:06Z",
+      "mergedAt": "2021-10-25T10:31:06Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "9343f111396b590e023be9058cf010a5b77279d6"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 37,
+      "id": "PR_kwDOClypJM4tXBbl",
+      "title": "Fix signatureAlgorithm reference",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/37",
+      "state": "MERGED",
+      "author": "dongbeiouba",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-10-19T02:38:41Z",
+      "updatedAt": "2022-02-25T19:57:32Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "5015fa574d0671060d99b8e2a26941a7d4a3a2d5",
+      "headRepository": null,
+      "headRefName": "fix",
+      "headRefOid": "50c5f253207462befea398c8f2c22592f808a5f9",
+      "closedAt": "2022-02-25T19:57:32Z",
+      "mergedAt": "2022-02-25T19:57:32Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "4b88b641ff66668877f1728fbce5d0795bcfea2c"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 44,
+      "id": "PR_kwDOClypJM4zTy8M",
+      "title": "Remove varints",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/44",
+      "state": "MERGED",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #35",
+      "createdAt": "2022-02-22T21:13:27Z",
+      "updatedAt": "2022-02-25T19:57:57Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "095df6584c959247cc862486624c54ccdfd5e40b",
+      "headRepository": "bemasc/draft-ietf-tls-ctls",
+      "headRefName": "patch-1",
+      "headRefOid": "f7694f1b854d4337a582b58a2b00c97d339b5ffd",
+      "closedAt": "2022-02-25T19:57:57Z",
+      "mergedAt": "2022-02-25T19:57:57Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "1091e82fb9dee92d35aa77fa68c242efbbf5b495"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 45,
+      "id": "PR_kwDOClypJM4zUagl",
+      "title": "Make cTLS extensible",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/45",
+      "state": "MERGED",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #39",
+      "createdAt": "2022-02-23T02:20:23Z",
+      "updatedAt": "2022-03-07T20:04:46Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "095df6584c959247cc862486624c54ccdfd5e40b",
+      "headRepository": "bemasc/draft-ietf-tls-ctls",
+      "headRefName": "bemasc-optional",
+      "headRefOid": "799d22b18369a000dd88db137e7fc9bafb58f9df",
+      "closedAt": "2022-03-07T20:04:46Z",
+      "mergedAt": "2022-03-07T20:04:46Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "9e406d6fbe2e249dabc96a4ca5b5132455e11647"
+      },
+      "comments": [
+        {
+          "author": "hannestschofenig",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "This PR looks good to me. ",
+          "createdAt": "2022-03-01T10:39:42Z",
+          "updatedAt": "2022-03-01T10:39:42Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOClypJM41waNZ",
+          "commit": {
+            "abbreviatedOid": "caede0f"
+          },
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-07T15:50:13Z",
+          "updatedAt": "2022-03-07T17:09:24Z",
+          "comments": [
+            {
+              "originalPosition": 17,
+              "body": "@bemasc.\r\n\r\nI like the general idea here, but it's not clear to me how this is going to work. Like how do I infer whether the key is in use or not? Can you give an example?",
+              "createdAt": "2022-03-07T15:50:13Z",
+              "updatedAt": "2022-03-07T17:09:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM41xAXe",
+          "commit": {
+            "abbreviatedOid": "caede0f"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-07T17:45:34Z",
+          "updatedAt": "2022-03-07T17:45:34Z",
+          "comments": [
+            {
+              "originalPosition": 17,
+              "body": "Yes, this can only be used for keys that the server can disambiguate.  I'm not necessarily claiming that any such keys have been defined, but I think we might as well agree ahead of time on where to put them, for forwards-compatibility.\r\n\r\nMy main point here is that all the other keys are _not_ optional, and if you don't recognize one then you can't use the template.",
+              "createdAt": "2022-03-07T17:45:34Z",
+              "updatedAt": "2022-03-07T17:45:34Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM41xBns",
+          "commit": {
+            "abbreviatedOid": "caede0f"
+          },
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-07T17:49:55Z",
+          "updatedAt": "2022-03-07T17:49:56Z",
+          "comments": [
+            {
+              "originalPosition": 17,
+              "body": "OK, that's fair. Could you add some text to the effect about disambiguate and I'll merge thjs?",
+              "createdAt": "2022-03-07T17:49:55Z",
+              "updatedAt": "2022-03-07T17:49:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM41xiz6",
+          "commit": {
+            "abbreviatedOid": "caede0f"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-07T19:52:57Z",
+          "updatedAt": "2022-03-07T19:52:57Z",
+          "comments": [
+            {
+              "originalPosition": 17,
+              "body": "Done",
+              "createdAt": "2022-03-07T19:52:57Z",
+              "updatedAt": "2022-03-07T19:52:58Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 46,
+      "id": "PR_kwDOClypJM4zuLOu",
+      "title": "Benjamin Schwartz added to the acknowledgment section",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/46",
+      "state": "MERGED",
+      "author": "hannestschofenig",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-03-01T11:05:13Z",
+      "updatedAt": "2022-03-07T15:47:49Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "1091e82fb9dee92d35aa77fa68c242efbbf5b495",
+      "headRepository": "hannestschofenig/draft-rescorla-tls-ctls",
+      "headRefName": "patch-16",
+      "headRefOid": "9648b5c0ea65686d6d5fe0827fb7e8af970990ea",
+      "closedAt": "2022-03-07T15:47:48Z",
+      "mergedAt": "2022-03-07T15:47:48Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "b3c33cd3879b15ab1ead33cc41a8a832af8c0c25"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 47,
+      "id": "PR_kwDOClypJM4zuQ9V",
+      "title": "Content Type for Plaintext Alert Messages",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/47",
+      "state": "CLOSED",
+      "author": "hannestschofenig",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-03-01T11:30:22Z",
+      "updatedAt": "2022-03-07T20:04:56Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "1091e82fb9dee92d35aa77fa68c242efbbf5b495",
+      "headRepository": "hannestschofenig/draft-rescorla-tls-ctls",
+      "headRefName": "patch-17",
+      "headRefOid": "c931872c75564a9d3f3313a13df481868d7d6851",
+      "closedAt": "2022-03-07T20:04:55Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOClypJM41b4oy",
+          "commit": {
+            "abbreviatedOid": "48221ad"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-03-01T16:01:23Z",
+          "updatedAt": "2022-03-01T16:02:24Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "```suggestion\r\nUnencrypted handshake records use the content type is always `ctls_handshake`.\r\n```",
+              "createdAt": "2022-03-01T16:01:23Z",
+              "updatedAt": "2022-03-01T16:02:24Z"
+            },
+            {
+              "originalPosition": 16,
+              "body": "```suggestion\r\n`ctls_alert`.\r\n```",
+              "createdAt": "2022-03-01T16:01:40Z",
+              "updatedAt": "2022-03-01T16:02:24Z"
+            },
+            {
+              "originalPosition": 18,
+              "body": "```suggestion\r\nUnencrypted handshake records use the content type `ctls_handshake`.\r\n```",
+              "createdAt": "2022-03-01T16:02:03Z",
+              "updatedAt": "2022-03-01T16:02:24Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 48,
+      "id": "PR_kwDOClypJM4zuT9o",
+      "title": "Profile_id moved to the ClientHello",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/48",
+      "state": "MERGED",
+      "author": "hannestschofenig",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-03-01T11:46:51Z",
+      "updatedAt": "2022-03-07T15:57:29Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "1091e82fb9dee92d35aa77fa68c242efbbf5b495",
+      "headRepository": "hannestschofenig/draft-rescorla-tls-ctls",
+      "headRefName": "patch-18",
+      "headRefOid": "60e6a818608620ffc83d7cd750a51ef4550a5965",
+      "closedAt": "2022-03-07T15:57:29Z",
+      "mergedAt": "2022-03-07T15:57:29Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "d7493aeb397d33b2608f7763224728139d655b11"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOClypJM41wcj0",
+          "commit": {
+            "abbreviatedOid": "0674179"
+          },
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-07T15:56:30Z",
+          "updatedAt": "2022-03-07T15:56:31Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "```suggestion\r\na zero-length value and only if no compression profile is used.  Non-zero\r\n```",
+              "createdAt": "2022-03-07T15:56:31Z",
+              "updatedAt": "2022-03-07T15:56:31Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM41wc02",
+          "commit": {
+            "abbreviatedOid": "aae1809"
+          },
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-07T15:57:16Z",
+          "updatedAt": "2022-03-07T15:57:17Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "```suggestion\r\na zero-length value and only if no compression profile is used.  Non zero-length\r\n```",
+              "createdAt": "2022-03-07T15:57:16Z",
+              "updatedAt": "2022-03-07T15:57:17Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 49,
+      "id": "PR_kwDOClypJM4zuVoi",
+      "title": "suppressSequenceNumber",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/49",
+      "state": "CLOSED",
+      "author": "hannestschofenig",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Added the suppressSequenceNumber element to the template-based specialization since it was accidentially delete. \r\nMandatory suppression of sequence numbers when reliable transports are used.",
+      "createdAt": "2022-03-01T11:53:24Z",
+      "updatedAt": "2022-03-07T20:00:19Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "1091e82fb9dee92d35aa77fa68c242efbbf5b495",
+      "headRepository": "hannestschofenig/draft-rescorla-tls-ctls",
+      "headRefName": "patch-19",
+      "headRefOid": "e9749e7c109305acadfbde002a5248c1758aea35",
+      "closedAt": "2022-03-07T20:00:05Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "OBE",
+          "createdAt": "2022-03-07T20:00:05Z",
+          "updatedAt": "2022-03-07T20:00:18Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOClypJM41bsTa",
+          "commit": {
+            "abbreviatedOid": "6f218aa"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-01T15:26:34Z",
+          "updatedAt": "2022-03-01T15:26:35Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "This strikes me as a bit odd.  Why not just make it automatic for streaming transports?\r\n\r\nConversely, is it ever reasonable to set this flag on a non-streaming transport?  Or could we just infer this setting from the transport and skip the configuration entirely?",
+              "createdAt": "2022-03-01T15:26:34Z",
+              "updatedAt": "2022-03-01T15:26:35Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 50,
+      "id": "PR_kwDOClypJM40Dk9k",
+      "title": "Clarify alerts. Fixes issue #40",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/50",
+      "state": "MERGED",
+      "author": "ekr",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "@hannestschofenig @bemasc ",
+      "createdAt": "2022-03-07T17:08:54Z",
+      "updatedAt": "2022-03-07T20:06:27Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "d7493aeb397d33b2608f7763224728139d655b11",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "alert_types",
+      "headRefOid": "19ce3ab2479f64234637475b419a3e0a70a4f4f4",
+      "closedAt": "2022-03-07T20:04:37Z",
+      "mergedAt": "2022-03-07T20:04:37Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "55139c1d77a17fa4704e908b1c127741f6dc3e66"
+      },
+      "comments": [
+        {
+          "author": "hannestschofenig",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I wonder whether this works. Here is the solution I came up with https://github.com/tlswg/draft-ietf-tls-ctls/pull/47/files",
+          "createdAt": "2022-03-07T18:08:34Z",
+          "updatedAt": "2022-03-07T18:08:34Z"
+        },
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "yeah that seems more complicated. Is there a reason why this won't work?",
+          "createdAt": "2022-03-07T18:14:25Z",
+          "updatedAt": "2022-03-07T18:14:25Z"
+        },
+        {
+          "author": "hannestschofenig",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "IMHO we somehow have to distinguish between three types of message (via the content type): \r\n- plaintext handshake messages (for the ClientHello, ServerHello/HRR)\r\n- encrypted cTLS messages, and \r\n- plaintext alert messages\r\n\r\nDo I see this wrong?",
+          "createdAt": "2022-03-07T18:24:02Z",
+          "updatedAt": "2022-03-07T18:24:02Z"
+        },
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Agreed. But that's\r\n\r\n\r\n-    plaintext handshake messages (for the ClientHello, ServerHello/HRR)   --> ctls_handshake\r\n-    encrypted cTLS messages, and --> The ordinary DTLS rules\r\n-    plaintext alert messages --> tls alert.\r\n",
+          "createdAt": "2022-03-07T18:27:13Z",
+          "updatedAt": "2022-03-07T18:27:13Z"
+        },
+        {
+          "author": "hannestschofenig",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I guess I was thinking about this in a too complicated way. \r\n\r\nDo you want to use the regular TLS Alert message format? (Fine for me.)\r\n\r\n",
+          "createdAt": "2022-03-07T18:57:41Z",
+          "updatedAt": "2022-03-07T18:57:41Z"
+        },
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "That is my proposal.\n\nOn Mon, Mar 7, 2022 at 10:57 AM Hannes Tschofenig ***@***.***>\nwrote:\n\n> I guess I was thinking about this in a too complicated way.\n>\n> Do you want to use the regular TLS Alert message format? (Fine for me.)\n>\n> \u2014\n> Reply to this email directly, view it on GitHub\n> <https://github.com/tlswg/draft-ietf-tls-ctls/pull/50#issuecomment-1061022206>,\n> or unsubscribe\n> <https://github.com/notifications/unsubscribe-auth/AAIPLIKWPFSCKOYULLPRBULU6ZGTPANCNFSM5QD4VS2A>\n> .\n> Triage notifications on the go with GitHub Mobile for iOS\n> <https://apps.apple.com/app/apple-store/id1477376905?ct=notification-email&mt=8&pt=524675>\n> or Android\n> <https://play.google.com/store/apps/details?id=com.github.android&referrer=utm_campaign%3Dnotification-email%26utm_medium%3Demail%26utm_source%3Dgithub>.\n>\n> You are receiving this because you authored the thread.Message ID:\n> ***@***.***>\n>\n",
+          "createdAt": "2022-03-07T19:00:24Z",
+          "updatedAt": "2022-03-07T19:00:24Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think the logical way to do this would be to register `ctls_handshake` in the [ContentType registry](https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-5).  Otherwise, you're setting up a potential collision as more values are added to that registry.",
+          "createdAt": "2022-03-07T19:43:27Z",
+          "updatedAt": "2022-03-07T19:43:27Z"
+        },
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes, I agree with that. I'm just talking about the technical approach\n\nOn Mon, Mar 7, 2022 at 11:43 AM Benjamin M. Schwartz <\n***@***.***> wrote:\n\n> I think the logical way to do this would be to register ctls_handshake in\n> the ContentType registry\n> <https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-5>.\n> Otherwise, you're setting up a potential collision as more values are added\n> to that registry.\n>\n> \u2014\n> Reply to this email directly, view it on GitHub\n> <https://github.com/tlswg/draft-ietf-tls-ctls/pull/50#issuecomment-1061065824>,\n> or unsubscribe\n> <https://github.com/notifications/unsubscribe-auth/AAIPLIP7STZ5HZ2SRIAKKYLU6ZL7BANCNFSM5QD4VS2A>\n> .\n> Triage notifications on the go with GitHub Mobile for iOS\n> <https://apps.apple.com/app/apple-store/id1477376905?ct=notification-email&mt=8&pt=524675>\n> or Android\n> <https://play.google.com/store/apps/details?id=com.github.android&referrer=utm_campaign%3Dnotification-email%26utm_medium%3Demail%26utm_source%3Dgithub>.\n>\n> You are receiving this because you authored the thread.Message ID:\n> ***@***.***>\n>\n",
+          "createdAt": "2022-03-07T19:58:29Z",
+          "updatedAt": "2022-03-07T19:58:29Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "OK, then I think this PR might as well add the IANA instruction for that.",
+          "createdAt": "2022-03-07T20:04:20Z",
+          "updatedAt": "2022-03-07T20:04:20Z"
+        },
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I made a separate IANA PR\nhttps://github.com/tlswg/draft-ietf-tls-ctls/pull/53\n\nOn Mon, Mar 7, 2022 at 12:04 PM Benjamin M. Schwartz <\n***@***.***> wrote:\n\n> OK, then I think this PR might as well add the IANA instruction for that.\n>\n> \u2014\n> Reply to this email directly, view it on GitHub\n> <https://github.com/tlswg/draft-ietf-tls-ctls/pull/50#issuecomment-1061082784>,\n> or unsubscribe\n> <https://github.com/notifications/unsubscribe-auth/AAIPLIKDROHHGNMK2WJPALLU6ZONJANCNFSM5QD4VS2A>\n> .\n> Triage notifications on the go with GitHub Mobile for iOS\n> <https://apps.apple.com/app/apple-store/id1477376905?ct=notification-email&mt=8&pt=524675>\n> or Android\n> <https://play.google.com/store/apps/details?id=com.github.android&referrer=utm_campaign%3Dnotification-email%26utm_medium%3Demail%26utm_source%3Dgithub>.\n>\n> You are receiving this because you authored the thread.Message ID:\n> ***@***.***>\n>\n",
+          "createdAt": "2022-03-07T20:06:27Z",
+          "updatedAt": "2022-03-07T20:06:27Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 51,
+      "id": "PR_kwDOClypJM40DnDr",
+      "title": "Replace suppressSequenceNumber with transport-specific behavior",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/51",
+      "state": "MERGED",
+      "author": "ekr",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I'm slightly concerned about the fact that we have two different wire behaviors with the same transcript, but because the integrity tag includes the header, I think it's OK.\r\n\r\n@martinthomson would welcome your thoughts.",
+      "createdAt": "2022-03-07T17:17:14Z",
+      "updatedAt": "2022-03-08T16:11:02Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "d7493aeb397d33b2608f7763224728139d655b11",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "suppress_sequence_number",
+      "headRefOid": "2f210494ba135d4b5846bcf2bedb33860a7b5d0c",
+      "closedAt": "2022-03-07T19:59:49Z",
+      "mergedAt": "2022-03-07T19:59:49Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "b644b7c253659f18f8190fa2b9a9729468c722d1"
+      },
+      "comments": [
+        {
+          "author": "hannestschofenig",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I think I have addressed this aspect already in PR https://github.com/tlswg/draft-ietf-tls-ctls/pull/49",
+          "createdAt": "2022-03-07T18:07:17Z",
+          "updatedAt": "2022-03-07T18:07:17Z"
+        },
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Correct. I thought Ben's suggestion to tie it to transport made more sense, but I'm not hard over on it.",
+          "createdAt": "2022-03-07T18:14:04Z",
+          "updatedAt": "2022-03-07T18:14:04Z"
+        },
+        {
+          "author": "hannestschofenig",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Fine for me too.",
+          "createdAt": "2022-03-07T18:25:48Z",
+          "updatedAt": "2022-03-07T18:25:48Z"
+        },
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "S = \"sequence number\"\n\nOn Tue, Mar 8, 2022 at 3:53 AM Martin Thomson ***@***.***>\nwrote:\n\n> ***@***.**** commented on this pull request.\n> ------------------------------\n>\n> In draft-ietf-tls-ctls.md\n> <https://github.com/tlswg/draft-ietf-tls-ctls/pull/51#discussion_r821590625>\n> :\n>\n> > @@ -410,11 +410,10 @@ transports (e.g., TCP), the length field MUST be present. For use over other\n>  transports length information may be inferred from the underlying layer.\n>\n>  Normal DTLS does not provide a mechanism for suppressing the sequence number\n> -field entirely.  In cases where a sequence number is not required (e.g., when a\n> -reliable transport is in use), a cTLS implementation may suppress it by setting\n> -the `suppressSequenceNumber` flag in the compression profile being used (see\n> -{{template-based-specialization}}).  When this flag is enabled, the S bit in the\n> -configuration octet MUST be cleared.\n> +field entirely. When a reliable, ordered transport (e.g., TCP) is in use, the\n> +S bit in the configuration octet MUST be cleared and the sequence number\n>\n> S = stream transport ?\n>\n> \u2014\n> Reply to this email directly, view it on GitHub\n> <https://github.com/tlswg/draft-ietf-tls-ctls/pull/51#pullrequestreview-902913889>,\n> or unsubscribe\n> <https://github.com/notifications/unsubscribe-auth/AAIPLIMKLBNYM7GCFTUTG73U645TPANCNFSM5QD5MIYQ>\n> .\n> Triage notifications on the go with GitHub Mobile for iOS\n> <https://apps.apple.com/app/apple-store/id1477376905?ct=notification-email&mt=8&pt=524675>\n> or Android\n> <https://play.google.com/store/apps/details?id=com.github.android&referrer=utm_campaign%3Dnotification-email%26utm_medium%3Demail%26utm_source%3Dgithub>.\n>\n> You are receiving this because you modified the open/close state.Message\n> ID: ***@***.***>\n>\n",
+          "createdAt": "2022-03-08T16:11:01Z",
+          "updatedAt": "2022-03-08T16:11:01Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOClypJM41xhGm",
+          "commit": {
+            "abbreviatedOid": "eefe9b6"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-07T19:46:03Z",
+          "updatedAt": "2022-03-07T19:46:03Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "```suggestion\r\nfield entirely. When a reliable, ordered transport (e.g., TCP) is in use, the\r\n```",
+              "createdAt": "2022-03-07T19:46:03Z",
+              "updatedAt": "2022-03-07T19:46:03Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM41xhGn",
+          "commit": {
+            "abbreviatedOid": "eefe9b6"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-07T19:46:03Z",
+          "updatedAt": "2022-03-07T19:46:03Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "```suggestion\r\nfield entirely. When a reliable, ordered transport (e.g., TCP) is in use, the\r\n```",
+              "createdAt": "2022-03-07T19:46:03Z",
+              "updatedAt": "2022-03-07T19:46:03Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM410V9h",
+          "commit": {
+            "abbreviatedOid": "2f21049"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-08T11:53:11Z",
+          "updatedAt": "2022-03-08T11:53:11Z",
+          "comments": [
+            {
+              "originalPosition": 10,
+              "body": "S = stream transport ?",
+              "createdAt": "2022-03-08T11:53:11Z",
+              "updatedAt": "2022-03-08T11:53:11Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 52,
+      "id": "PR_kwDOClypJM40Dng3",
+      "title": "Clarify DTLS encryption",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/52",
+      "state": "MERGED",
+      "author": "ekr",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-03-07T17:19:05Z",
+      "updatedAt": "2022-03-07T17:50:52Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "d7493aeb397d33b2608f7763224728139d655b11",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "aead",
+      "headRefOid": "266fdbe1836ee0fa20024935a4dd93c51612f021",
+      "closedAt": "2022-03-07T17:22:50Z",
+      "mergedAt": "2022-03-07T17:22:50Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "266fdbe1836ee0fa20024935a4dd93c51612f021"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOClypJM41w4R5",
+          "commit": {
+            "abbreviatedOid": "266fdbe"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-03-07T17:20:07Z",
+          "updatedAt": "2022-03-07T17:20:10Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "Can we cite the document too?",
+              "createdAt": "2022-03-07T17:20:07Z",
+              "updatedAt": "2022-03-07T17:20:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM41xB5A",
+          "commit": {
+            "abbreviatedOid": "266fdbe"
+          },
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-07T17:50:52Z",
+          "updatedAt": "2022-03-07T17:50:52Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "Done",
+              "createdAt": "2022-03-07T17:50:52Z",
+              "updatedAt": "2022-03-07T17:50:52Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 53,
+      "id": "PR_kwDOClypJM40EKSL",
+      "title": "IANA considerations",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/53",
+      "state": "MERGED",
+      "author": "ekr",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Added ctls_handshake and make DTLS OK Y",
+      "createdAt": "2022-03-07T20:04:27Z",
+      "updatedAt": "2022-03-07T20:05:54Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "b644b7c253659f18f8190fa2b9a9729468c722d1",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "iana",
+      "headRefOid": "b98e92729030a733a85f3cc6d292b86ef134573a",
+      "closedAt": "2022-03-07T20:05:54Z",
+      "mergedAt": "2022-03-07T20:05:54Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "128543c2a5974fb2b167dcd842ae039061e87f06"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOClypJM41xlzb",
+          "commit": {
+            "abbreviatedOid": "b98e927"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-03-07T20:05:00Z",
+          "updatedAt": "2022-03-07T20:05:00Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 55,
+      "id": "PR_kwDOClypJM400mgg",
+      "title": "Fix specification of `profile_id`",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/55",
+      "state": "MERGED",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This change also reserves short profile IDs for \"well-known\" use.\r\n\r\nFixes https://github.com/tlswg/draft-ietf-tls-ctls/issues/54",
+      "createdAt": "2022-03-22T15:28:03Z",
+      "updatedAt": "2022-07-01T03:17:21Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "66c082e56a64fee61619fc585ac30f08323f93ef",
+      "headRepository": "bemasc/draft-ietf-tls-ctls",
+      "headRefName": "bemasc-profile-id",
+      "headRefOid": "eac9a17692e9d60944978ac8c27f5ad79e28fc55",
+      "closedAt": "2022-07-01T03:17:21Z",
+      "mergedAt": "2022-07-01T03:17:21Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "e3735574485f5fab2c76b20ea3f5dc5e7ee8d0cd"
+      },
+      "comments": [
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Can we please try to resolve this question soon to unblock implementation?",
+          "createdAt": "2022-05-10T15:15:12Z",
+          "updatedAt": "2022-05-10T15:15:12Z"
+        },
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@hannestschofenig @bifurcation Any objection to merging this?",
+          "createdAt": "2022-06-14T18:11:03Z",
+          "updatedAt": "2022-06-14T18:11:03Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOClypJM42w3_e",
+          "commit": {
+            "abbreviatedOid": "b3ccd1a"
+          },
+          "author": "richsalz",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-23T13:32:12Z",
+          "updatedAt": "2022-03-23T13:32:13Z",
+          "comments": [
+            {
+              "originalPosition": 104,
+              "body": "How about \"2\" being expert review?  Also consider making 2+3 in that category and 4+ FCFS.  Consider saying profiles starting with \"-\" will never be assigned by IANA, leaving that open for private use and experimentation.",
+              "createdAt": "2022-03-23T13:32:12Z",
+              "updatedAt": "2022-03-23T13:32:13Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM42w3_f",
+          "commit": {
+            "abbreviatedOid": "b3ccd1a"
+          },
+          "author": "richsalz",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-23T13:32:12Z",
+          "updatedAt": "2022-03-23T13:32:13Z",
+          "comments": [
+            {
+              "originalPosition": 104,
+              "body": "How about \"2\" being expert review?  Also consider making 2+3 in that category and 4+ FCFS.  Consider saying profiles starting with \"-\" will never be assigned by IANA, leaving that open for private use and experimentation.",
+              "createdAt": "2022-03-23T13:32:12Z",
+              "updatedAt": "2022-03-23T13:32:13Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM42w4Ms",
+          "commit": {
+            "abbreviatedOid": "b3ccd1a"
+          },
+          "author": "richsalz",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-23T13:32:45Z",
+          "updatedAt": "2022-03-23T13:32:45Z",
+          "comments": [
+            {
+              "originalPosition": 111,
+              "body": "are you sure the ID value is `0x00` and not an empty string?",
+              "createdAt": "2022-03-23T13:32:45Z",
+              "updatedAt": "2022-03-23T13:32:46Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM42w9IS",
+          "commit": {
+            "abbreviatedOid": "b3ccd1a"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-23T13:45:03Z",
+          "updatedAt": "2022-04-21T17:57:47Z",
+          "comments": [
+            {
+              "originalPosition": 111,
+              "body": "Yes.  The empty string corresponds to an empty profile (no specified version).",
+              "createdAt": "2022-03-23T13:45:03Z",
+              "updatedAt": "2022-04-21T17:57:47Z"
+            },
+            {
+              "originalPosition": 104,
+              "body": "> How about \"2\" being expert review? Also consider making 2+3 in that category\r\n\r\nThat's fine with me.\r\n\r\n> and 4+ FCFS. Consider saying profiles starting with \"-\" will never be assigned by IANA, leaving that open for private use and experimentation.\r\n\r\nTo be clear, the registry only covers IDs of length <=4.  Longer IDs are not subject to IANA registration at all, so they can only be used in a populated template.  That's effectively a private use range, so I don't see much benefit in reserving some of the short IDs for private use as well.\r\n\r\nI considered the reverse: reserving a subset of the long IDs as IANA-controlled.  However, this would make randomly generated IDs slightly tricky/larger, since you would need to make sure not to step into the IANA range.  ::shrug::\r\n",
+              "createdAt": "2022-03-23T14:00:41Z",
+              "updatedAt": "2022-04-21T17:57:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM44kxlW",
+          "commit": {
+            "abbreviatedOid": "b3ccd1a"
+          },
+          "author": "richsalz",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T20:10:32Z",
+          "updatedAt": "2022-04-21T20:10:32Z",
+          "comments": [
+            {
+              "originalPosition": 104,
+              "body": "So as long as there's a note with the registry saying IANA does not register names longer than four characters, that's good.",
+              "createdAt": "2022-04-21T20:10:32Z",
+              "updatedAt": "2022-04-21T20:10:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM44kx8T",
+          "commit": {
+            "abbreviatedOid": "b3ccd1a"
+          },
+          "author": "richsalz",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T20:12:04Z",
+          "updatedAt": "2022-04-21T20:12:04Z",
+          "comments": [
+            {
+              "originalPosition": 111,
+              "body": "But 0x00 is not the empty string \"\" is.  Are strings NUL terminated?  https://github.com/tlswg/draft-ietf-tls-ctls/pull/55/files/b3ccd1a338de8d4a851cce8d7b5a26ccf4397683#diff-71b811173d0ff96753ecc5795f5a67be555770bcfe01c345ca9c1ed644e07306R151 shows a string inside quotes; this should match that I think.",
+              "createdAt": "2022-04-21T20:12:04Z",
+              "updatedAt": "2022-04-21T20:12:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM44k2J7",
+          "commit": {
+            "abbreviatedOid": "b3ccd1a"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-21T20:30:48Z",
+          "updatedAt": "2022-04-21T20:32:47Z",
+          "comments": [
+            {
+              "originalPosition": 104,
+              "body": "OK, I've added a note to that effect.",
+              "createdAt": "2022-04-21T20:30:48Z",
+              "updatedAt": "2022-04-21T20:32:47Z"
+            },
+            {
+              "originalPosition": 111,
+              "body": "A profile ID is an octet sequence.  In JSON, this is represented as a hex-encoded string, but not all hex strings are valid (e.g. odd length strings) or distinct (e.g. capitalization).\r\n\r\nI've added square brackets around the registered ID value to suggest that this is a list of length 1 containing the value zero.",
+              "createdAt": "2022-04-21T20:32:33Z",
+              "updatedAt": "2022-04-21T20:32:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM44oP2B",
+          "commit": {
+            "abbreviatedOid": "b3ccd1a"
+          },
+          "author": "richsalz",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-22T13:20:02Z",
+          "updatedAt": "2022-04-22T13:20:02Z",
+          "comments": [
+            {
+              "originalPosition": 111,
+              "body": "A list of length 1 is not a valid hex string.\r\n\r\nWhy not just make it a text string in netsascii or utf8?  Seems *much* simpler. I mean the cipher suites are strings...\r\n",
+              "createdAt": "2022-04-22T13:20:02Z",
+              "updatedAt": "2022-04-22T13:20:02Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM44ot9_",
+          "commit": {
+            "abbreviatedOid": "b3ccd1a"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-22T14:43:28Z",
+          "updatedAt": "2022-04-22T14:43:28Z",
+          "comments": [
+            {
+              "originalPosition": 111,
+              "body": "A profile ID is an octet sequence containing up to 255 octets.  The registry contains one such octet sequence (the sequence of length one whose first and only octet is zero).  This is all the same as ALPN, except that values longer than 4 are effectively \"Private Use\".\r\n\r\nSpecifying the profile ID as netascii seems dangerous, because JSON strings are always unicode.  It seems to me that an implementation could easily fail to handle some aspect of the netascii<->unicode conversion (e.g. embedded NUL bytes), leading to compatibility or security problems.\r\n\r\nSpecifying the profile ID as UTF-8 is inconvenient and inefficient for randomly generated profile IDs.  Instead of simply choosing N > 4 random octets, the profile generator has to do something more complicated (e.g. `profile_id = base64(random)`), and the resulting ClientHello will be larger for no reason (counter to the purpose of cTLS).",
+              "createdAt": "2022-04-22T14:43:28Z",
+              "updatedAt": "2022-04-22T14:43:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM44oz7W",
+          "commit": {
+            "abbreviatedOid": "b3ccd1a"
+          },
+          "author": "richsalz",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-22T15:01:57Z",
+          "updatedAt": "2022-04-22T15:01:57Z",
+          "comments": [
+            {
+              "originalPosition": 111,
+              "body": "Trying to optimize for randomly-generated profile IDs?  Is that really a common use-case? My conception was that there would be, maybe, a couple-dozen in widespread use.  But if you really need to do that, getting `n` random bytes and making them utf8 is essentially zero cost.",
+              "createdAt": "2022-04-22T15:01:57Z",
+              "updatedAt": "2022-04-22T15:01:57Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM44pKJX",
+          "commit": {
+            "abbreviatedOid": "b3ccd1a"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-22T16:16:42Z",
+          "updatedAt": "2022-04-22T16:16:43Z",
+          "comments": [
+            {
+              "originalPosition": 111,
+              "body": "cTLS profiles can contain certificates and even key shares, so they will need to be generated and rotated automatically.  If cTLS is in widespread use, there could easily be millions of distinct profiles.\r\n\r\nThe comparison to cipher suites seems relevant.  Cipher suites are identified by human-readable strings, but the cipher suite identifier transmitted on the wire is a compact binary value.  In this case, the `profile_id` is sent verbatim on the wire, so it is natural for it to also be a compact binary value.",
+              "createdAt": "2022-04-22T16:16:42Z",
+              "updatedAt": "2022-04-22T16:16:43Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM447Tmt",
+          "commit": {
+            "abbreviatedOid": "b3ccd1a"
+          },
+          "author": "richsalz",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-04-27T15:05:41Z",
+          "updatedAt": "2022-04-27T15:05:42Z",
+          "comments": [
+            {
+              "originalPosition": 111,
+              "body": "> cTLS profiles can contain certificates and even key shares, so they will need to be generated and rotated automatically. If cTLS is in widespread use, there could easily be millions of distinct profiles\r\n\r\nThat's not how I was thinking of things, but okay I withdraw the suggestion.",
+              "createdAt": "2022-04-27T15:05:42Z",
+              "updatedAt": "2022-04-27T15:05:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM47V_4_",
+          "commit": {
+            "abbreviatedOid": "b0e0e2b"
+          },
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "This LGTM. ",
+          "createdAt": "2022-06-03T23:10:44Z",
+          "updatedAt": "2022-06-03T23:10:44Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOClypJM47i5Is",
+          "commit": {
+            "abbreviatedOid": "b0e0e2b"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-06-08T01:16:17Z",
+          "updatedAt": "2022-06-08T01:16:17Z",
+          "comments": [
+            {
+              "originalPosition": 105,
+              "body": "```suggestion\r\nThe ID values of length 1 are subject to a \"Standards Action\" registry\r\n```",
+              "createdAt": "2022-06-08T01:16:17Z",
+              "updatedAt": "2022-06-08T01:16:17Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 58,
+      "id": "PR_kwDOClypJM45VmW8",
+      "title": "Adjust markdown to avoid warnings in the build",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/58",
+      "state": "MERGED",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-06-08T17:38:43Z",
+      "updatedAt": "2022-06-08T17:50:51Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "4f53c43e7501ae1269dbab19ca57f0d3f5d3ecdc",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "bemasc-warnings",
+      "headRefOid": "dc6a5157cf4d125894740a73ca1f7b20431c5a2f",
+      "closedAt": "2022-06-08T17:50:51Z",
+      "mergedAt": "2022-06-08T17:50:51Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "66c082e56a64fee61619fc585ac30f08323f93ef"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 59,
+      "id": "PR_kwDOClypJM45V3s0",
+      "title": "Specify framing mode",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/59",
+      "state": "MERGED",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #41, #42",
+      "createdAt": "2022-06-08T18:58:53Z",
+      "updatedAt": "2022-07-07T22:58:03Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "e3735574485f5fab2c76b20ea3f5dc5e7ee8d0cd",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "bemasc-framing",
+      "headRefOid": "be390157df85c47b771cd36b84893ea83743ddf2",
+      "closedAt": "2022-07-07T22:58:03Z",
+      "mergedAt": "2022-07-07T22:58:02Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "b68a05df3ba4261db7f9d6afed72b46a7140d9d3"
+      },
+      "comments": [
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "FYI, this PR now moves `profile_id` out of the ClientHello back into `CTLSPlaintext` (now called `CTLSClientPlaintext`).  This avoids confusing questions about how to demultiplex profiles that use different `handshakeFraming` modes.",
+          "createdAt": "2022-07-01T17:21:47Z",
+          "updatedAt": "2022-07-01T17:21:47Z"
+        },
+        {
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "body": "LGTM.",
+          "createdAt": "2022-07-07T22:57:39Z",
+          "updatedAt": "2022-07-07T22:57:39Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOClypJM47oZ54",
+          "commit": {
+            "abbreviatedOid": "14109da"
+          },
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-06-08T20:55:36Z",
+          "updatedAt": "2022-06-08T20:55:52Z",
+          "comments": [
+            {
+              "originalPosition": 79,
+              "body": "Do we need to say how you also need an in-order transport?",
+              "createdAt": "2022-06-08T20:55:36Z",
+              "updatedAt": "2022-06-08T20:55:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM47pAJg",
+          "commit": {
+            "abbreviatedOid": "14109da"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-06-09T01:02:12Z",
+          "updatedAt": "2022-06-09T01:02:12Z",
+          "comments": [
+            {
+              "originalPosition": 79,
+              "body": "I had intended this to be usable even on out-of-order transports.  It appears to be safe for DTLS 1.3, because the only messages sent in plaintext are ClientHello, ServerHello, HelloRetryRequest, and Alert, each of which constitutes an entire \"flight\" and so is at no risk of reordering.  All multi-message flights are in ciphertext, and can rely on the unified header's sequence number for ordering.\r\n\r\nThis would not have worked in DTLS 1.2, and I suppose it is not guaranteed for future versions.  Perhaps we can nonetheless rely on this property for now, and address the problem if it arises in the future.\r\n\r\nI'm not 100% sure how this interacts with the DTLS ACK and retransmission system, but it seems reasonably straightforward to deduplicate identical ServerHellos, to avoid placing a retransmitted ServerHello in the transcript twice.",
+              "createdAt": "2022-06-09T01:02:12Z",
+              "updatedAt": "2022-06-09T01:02:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM49IpKX",
+          "commit": {
+            "abbreviatedOid": "14109da"
+          },
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-01T03:18:53Z",
+          "updatedAt": "2022-07-01T03:18:53Z",
+          "comments": [
+            {
+              "originalPosition": 79,
+              "body": "I don't think you can rely on the sequence number for reordering because retransmits use a new sequence number.",
+              "createdAt": "2022-07-01T03:18:53Z",
+              "updatedAt": "2022-07-01T03:18:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM49Lrdz",
+          "commit": {
+            "abbreviatedOid": "14109da"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-01T17:20:15Z",
+          "updatedAt": "2022-07-01T17:20:15Z",
+          "comments": [
+            {
+              "originalPosition": 79,
+              "body": "I had been thinking that we would change that, but never mind.\r\n\r\nI've added a `CTLSDatagramHandshake` type that has a `message_seq` field for reordering.",
+              "createdAt": "2022-07-01T17:20:15Z",
+              "updatedAt": "2022-07-01T17:20:15Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 60,
+      "id": "PR_kwDOClypJM46djUu",
+      "title": "Remove \"baseline TLS\" handshake reconstruction",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/60",
+      "state": "MERGED",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This is a radical change that attempts to implement the (possible)\r\nconsensus to move from a \"reconstruction-based\" transcript to a\r\n\"non-reconstruction\" transcript.  Verifying the transcript without\r\nreconstruction requires the transcript to include the template,\r\nwhich requires a byte-identical representation of the template.\r\nThis change makes this possible by introducing a stable binary\r\nrepresentation of the template, with JSON as a human-readable\r\nalternative.\r\n\r\nThis change also attempts to:\r\n* Formalize the notion of when vector lengths can be omitted\r\n* Rearrange the extension templating in a more convenient fashion\r\n\r\nFixes #57\r\n",
+      "createdAt": "2022-06-28T02:19:26Z",
+      "updatedAt": "2022-07-08T16:20:51Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "e3735574485f5fab2c76b20ea3f5dc5e7ee8d0cd",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "bemasc-transcript",
+      "headRefOid": "cd9eb376947a67eded0ff33acc6690061c6af3fe",
+      "closedAt": "2022-07-08T16:20:45Z",
+      "mergedAt": "2022-07-08T16:20:44Z",
+      "mergedBy": "bemasc",
+      "mergeCommit": {
+        "oid": "798929b47e7659903cd686cbdcedb11c03a4d561"
+      },
+      "comments": [
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Blocked by #55 and #59",
+          "createdAt": "2022-06-28T02:19:47Z",
+          "updatedAt": "2022-06-28T02:19:47Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOClypJM49IpP-",
+          "commit": {
+            "abbreviatedOid": "63c56e4"
+          },
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "I like the way this is going, but I think we probably can't quite land it before IETF. Once you've had a chance to respond to these comments, let's take the remaining ones to discussion.",
+          "createdAt": "2022-07-01T03:19:49Z",
+          "updatedAt": "2022-07-01T03:28:43Z",
+          "comments": [
+            {
+              "originalPosition": 19,
+              "body": "Hopefully isomorphic is still fine.",
+              "createdAt": "2022-07-01T03:19:49Z",
+              "updatedAt": "2022-07-01T03:28:43Z"
+            },
+            {
+              "originalPosition": 90,
+              "body": "I think we could remove this \"compression\" statement. It will  be confusing to future readers.",
+              "createdAt": "2022-07-01T03:20:39Z",
+              "updatedAt": "2022-07-01T03:28:43Z"
+            },
+            {
+              "originalPosition": 142,
+              "body": "Is this change separable?",
+              "createdAt": "2022-07-01T03:21:23Z",
+              "updatedAt": "2022-07-01T03:28:43Z"
+            },
+            {
+              "originalPosition": 211,
+              "body": "Something missing here.",
+              "createdAt": "2022-07-01T03:21:54Z",
+              "updatedAt": "2022-07-01T03:28:43Z"
+            },
+            {
+              "originalPosition": 260,
+              "body": "32 byte?",
+              "createdAt": "2022-07-01T03:22:16Z",
+              "updatedAt": "2022-07-01T03:28:43Z"
+            },
+            {
+              "originalPosition": 328,
+              "body": "Something wrong here.",
+              "createdAt": "2022-07-01T03:22:57Z",
+              "updatedAt": "2022-07-01T03:28:43Z"
+            },
+            {
+              "originalPosition": 498,
+              "body": "I'm concerned about the implications of not reconstructing the transcript in this case.",
+              "createdAt": "2022-07-01T03:25:03Z",
+              "updatedAt": "2022-07-01T03:28:43Z"
+            },
+            {
+              "originalPosition": 549,
+              "body": "How clever will one have to be to get this right?",
+              "createdAt": "2022-07-01T03:25:36Z",
+              "updatedAt": "2022-07-01T03:28:43Z"
+            },
+            {
+              "originalPosition": 648,
+              "body": "This is going to require some thinking on my part to be sure this works.",
+              "createdAt": "2022-07-01T03:26:44Z",
+              "updatedAt": "2022-07-01T03:28:43Z"
+            },
+            {
+              "originalPosition": 657,
+              "body": "We may have to consume a handshake type for this to ensure it's injective.",
+              "createdAt": "2022-07-01T03:27:30Z",
+              "updatedAt": "2022-07-01T03:28:43Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM49Itmt",
+          "commit": {
+            "abbreviatedOid": "63c56e4"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-01T04:04:49Z",
+          "updatedAt": "2022-07-01T04:04:49Z",
+          "comments": [
+            {
+              "originalPosition": 127,
+              "body": "I think that this needs some sort of unambiguous identifier, like a version number, that ensures that we can replace this.  Maybe that's included in the process for integrating that into the transcript (`ctls_template`), which is OK, but a system for replacing this scheme with a better one is very important to have, even if this turns out to be perfect the first time.",
+              "createdAt": "2022-07-01T04:04:49Z",
+              "updatedAt": "2022-07-01T04:04:49Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM49Iunz",
+          "commit": {
+            "abbreviatedOid": "63c56e4"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-01T04:14:58Z",
+          "updatedAt": "2022-07-01T04:14:59Z",
+          "comments": [
+            {
+              "originalPosition": 132,
+              "body": "```suggestion\r\nElements in a `CTLSTemplate` MUST appear sorted by the type field in ascending order.\r\n```",
+              "createdAt": "2022-07-01T04:14:58Z",
+              "updatedAt": "2022-07-01T04:14:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM49L6-k",
+          "commit": {
+            "abbreviatedOid": "63c56e4"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-01T18:23:12Z",
+          "updatedAt": "2022-07-01T18:23:13Z",
+          "comments": [
+            {
+              "originalPosition": 19,
+              "body": "Changed to \"logically isomorphic\", as the \"logical transcript\" is the same, but there is no byte-conversion isomorphism due to the distinct Finished value.",
+              "createdAt": "2022-07-01T18:23:12Z",
+              "updatedAt": "2022-07-01T18:23:13Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM49L7Fy",
+          "commit": {
+            "abbreviatedOid": "63c56e4"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-01T18:23:39Z",
+          "updatedAt": "2022-07-01T18:23:39Z",
+          "comments": [
+            {
+              "originalPosition": 90,
+              "body": "OK, removed.",
+              "createdAt": "2022-07-01T18:23:39Z",
+              "updatedAt": "2022-07-01T18:23:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM49L7P2",
+          "commit": {
+            "abbreviatedOid": "63c56e4"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-01T18:24:16Z",
+          "updatedAt": "2022-07-01T18:24:17Z",
+          "comments": [
+            {
+              "originalPosition": 211,
+              "body": "Fixed, thanks.",
+              "createdAt": "2022-07-01T18:24:16Z",
+              "updatedAt": "2022-07-01T18:24:17Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM49L7Tx",
+          "commit": {
+            "abbreviatedOid": "63c56e4"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-01T18:24:30Z",
+          "updatedAt": "2022-07-01T18:24:30Z",
+          "comments": [
+            {
+              "originalPosition": 260,
+              "body": "Oops, yes.",
+              "createdAt": "2022-07-01T18:24:30Z",
+              "updatedAt": "2022-07-01T18:24:30Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM49L7fF",
+          "commit": {
+            "abbreviatedOid": "63c56e4"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-01T18:25:09Z",
+          "updatedAt": "2022-07-01T18:25:09Z",
+          "comments": [
+            {
+              "originalPosition": 328,
+              "body": "Thanks, fixed.",
+              "createdAt": "2022-07-01T18:25:09Z",
+              "updatedAt": "2022-07-01T18:25:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM49L77e",
+          "commit": {
+            "abbreviatedOid": "63c56e4"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-01T18:27:37Z",
+          "updatedAt": "2022-07-01T18:27:37Z",
+          "comments": [
+            {
+              "originalPosition": 498,
+              "body": "I'm reasonably confident that this is formally safe.  Interpretation of compressed certificates is driven exclusively by the template, which is in the transcript.\r\n\r\nThis arrangement is potentially more error-prone, as transcript->logical layer conversion is not verified by the handshake.",
+              "createdAt": "2022-07-01T18:27:37Z",
+              "updatedAt": "2022-07-01T18:27:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM49L8CB",
+          "commit": {
+            "abbreviatedOid": "63c56e4"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-01T18:28:08Z",
+          "updatedAt": "2022-07-01T18:28:09Z",
+          "comments": [
+            {
+              "originalPosition": 549,
+              "body": "My goal here was mostly to capture a behavior that was implied by some examples but not described anywhere in the text.  I've attempted to make this rule more explicit, to avoid any tricky reasoning being required.",
+              "createdAt": "2022-07-01T18:28:09Z",
+              "updatedAt": "2022-07-01T18:28:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM49L8DU",
+          "commit": {
+            "abbreviatedOid": "63c56e4"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-01T18:28:14Z",
+          "updatedAt": "2022-07-01T18:28:15Z",
+          "comments": [
+            {
+              "originalPosition": 648,
+              "body": "I've dropped this entirely due to changes in the `handshakeFraming` PR.",
+              "createdAt": "2022-07-01T18:28:14Z",
+              "updatedAt": "2022-07-01T18:28:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM49L8Qc",
+          "commit": {
+            "abbreviatedOid": "63c56e4"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-01T18:29:25Z",
+          "updatedAt": "2022-07-01T18:29:26Z",
+          "comments": [
+            {
+              "originalPosition": 657,
+              "body": "Yes, that's in the IANA section.  I've attempted to make that clearer here.",
+              "createdAt": "2022-07-01T18:29:25Z",
+              "updatedAt": "2022-07-01T18:29:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM49L8UL",
+          "commit": {
+            "abbreviatedOid": "63c56e4"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-01T18:29:44Z",
+          "updatedAt": "2022-07-01T18:29:44Z",
+          "comments": [
+            {
+              "originalPosition": 127,
+              "body": "OK, I added `CTLSTemplate.ctls_version` field.",
+              "createdAt": "2022-07-01T18:29:44Z",
+              "updatedAt": "2022-07-01T18:29:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM49L8WI",
+          "commit": {
+            "abbreviatedOid": "63c56e4"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-01T18:29:55Z",
+          "updatedAt": "2022-07-01T18:29:55Z",
+          "comments": [
+            {
+              "originalPosition": 132,
+              "body": "Done (but kept \"strictly\" due to uniqueness requirements).",
+              "createdAt": "2022-07-01T18:29:55Z",
+              "updatedAt": "2022-07-01T18:29:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM49MCRX",
+          "commit": {
+            "abbreviatedOid": "63c56e4"
+          },
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-01T18:59:13Z",
+          "updatedAt": "2022-07-01T18:59:13Z",
+          "comments": [
+            {
+              "originalPosition": 142,
+              "body": "I'm not sure what you mean.  I've put up #61 as an intermediate step that introduces the binary format without changing the transcript.\r\n\r\nIf you mean creating a version that doesn't define a JSON format at all: that is possible, but I didn't want to remove the JSON option without asking.  I have no strong preference on whether we define a JSON format.",
+              "createdAt": "2022-07-01T18:59:13Z",
+              "updatedAt": "2022-07-01T18:59:13Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM49hryv",
+          "commit": {
+            "abbreviatedOid": "63c56e4"
+          },
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-07T22:59:29Z",
+          "updatedAt": "2022-07-07T22:59:30Z",
+          "comments": [
+            {
+              "originalPosition": 498,
+              "body": "OK this persuades me.",
+              "createdAt": "2022-07-07T22:59:29Z",
+              "updatedAt": "2022-07-07T22:59:30Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM49hsxx",
+          "commit": {
+            "abbreviatedOid": "cd9eb37"
+          },
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-07T23:07:13Z",
+          "updatedAt": "2022-07-07T23:07:14Z",
+          "comments": [
+            {
+              "originalPosition": 498,
+              "body": "I'm persuaded. ",
+              "createdAt": "2022-07-07T23:07:14Z",
+              "updatedAt": "2022-07-07T23:07:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOClypJM49hs7E",
+          "commit": {
+            "abbreviatedOid": "cd9eb37"
+          },
+          "author": "ekr",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "I think this could use with some refinement, but it would be better in the draft than out.",
+          "createdAt": "2022-07-07T23:08:22Z",
+          "updatedAt": "2022-07-07T23:08:22Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 61,
+      "id": "PR_kwDOClypJM46udOQ",
+      "title": "Define a binary encoding for cTLS templates",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/61",
+      "state": "CLOSED",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This is an intermediate step toward being able to include the\r\ntemplate in the transcript (#60).  It also enables more efficient\r\ndistribution of cTLS templates.\r\n\r\nSee also #57\r\n",
+      "createdAt": "2022-07-01T18:52:41Z",
+      "updatedAt": "2022-07-08T11:55:48Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "bemasc-framing",
+      "baseRefOid": "be390157df85c47b771cd36b84893ea83743ddf2",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "bemasc-binary",
+      "headRefOid": "2c3986f0dd5bc9aa44d8eab971ae566c5a2d513a",
+      "closedAt": "2022-07-08T11:55:48Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "bemasc",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Closing in favor of the monolithic change in #60",
+          "createdAt": "2022-07-08T11:55:48Z",
+          "updatedAt": "2022-07-08T11:55:48Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 70,
+      "id": "PR_kwDOClypJM47OG2H",
+      "title": "Address review comments from Ilari Liusvaara",
+      "url": "https://github.com/tlswg/draft-ietf-tls-ctls/pull/70",
+      "state": "OPEN",
+      "author": "bemasc",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-07-11T21:01:30Z",
+      "updatedAt": "2022-07-11T21:01:30Z",
+      "baseRepository": "tlswg/draft-ietf-tls-ctls",
+      "baseRefName": "master",
+      "baseRefOid": "8f4f0a72391c8fd03ef7c19c40d3a20dfd8d0557",
+      "headRepository": "tlswg/draft-ietf-tls-ctls",
+      "headRefName": "bemasc-ilari",
+      "headRefOid": "0d65f7f475ef7829da547591b5ea39a863b75c73",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}
